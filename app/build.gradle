@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "com.komnacki.sportresultstracker"
         minSdkVersion 27
-        targetSdkVersion 27
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
