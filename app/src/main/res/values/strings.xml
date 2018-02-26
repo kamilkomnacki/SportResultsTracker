@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Sport results tracker</string>
+    <string name="title_activity_sports_list">SportsListActivity</string>
 </resources>

@@ -1,7 +1,9 @@
 package com.komnacki.sportresultstracker
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -10,5 +12,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         test.setText("Test from MainActivity")
+
+        button.setOnClickListener(View.OnClickListener {
+            val intent = Intent(this, SportsListActivity::class.java)
+            startActivity(intent)
+        })
     }
 }
