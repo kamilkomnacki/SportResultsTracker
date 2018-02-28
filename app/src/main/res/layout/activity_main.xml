@@ -25,5 +25,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Go to sports list" />
+    <Button
+        android:id="@+id/buttonToSportEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Go to sport edit"
+        app:layout_constraintTop_toBottomOf="@id/button"/>
 
 </android.support.constraint.ConstraintLayout>
