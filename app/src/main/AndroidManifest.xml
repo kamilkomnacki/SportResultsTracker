@@ -20,7 +20,8 @@
             android:name=".SportsListActivity"
             android:label="@string/title_activity_sports_list"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".SportEditActivity"></activity>
+        <activity android:name=".SportEditActivity" />
+        <activity android:name=".RecordEditActivity"></activity>
     </application>
 
 </manifest>

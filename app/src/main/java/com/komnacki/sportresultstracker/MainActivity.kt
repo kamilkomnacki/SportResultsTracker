@@ -22,5 +22,11 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, SportEditActivity::class.java)
             startActivity(intent)
         })
+
+
+        buttonToRecordEdit.setOnClickListener(View.OnClickListener {
+            val intent = Intent(this, RecordEditActivity::class.java)
+            startActivity(intent)
+        })
     }
 }
