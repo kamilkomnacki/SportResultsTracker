@@ -11,6 +11,8 @@ import kotlinx.android.synthetic.main.content_sports_list.*
 class SportsListActivity : AppCompatActivity() {
 
     var list = ArrayList<String>()
+    var list2 = ArrayList<String>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,8 +41,13 @@ class SportsListActivity : AppCompatActivity() {
         list.add("Element 15")
         list.add("Element 16")
 
+        lv_sports.emptyView = empty_sportsList
         val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list)
         lv_sports.adapter = adapter
+
+
+
+
 
     }
 

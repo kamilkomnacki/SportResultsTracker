@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Sport results tracker</string>
     <string name="title_activity_sports_list">SportsListActivity</string>
+    <string name="empty_sportsList">The list of your sports is empty...</string>
+    <string name="empty_sportsList_contentDescription">Add some sports by tapped add button below</string>
 </resources>
