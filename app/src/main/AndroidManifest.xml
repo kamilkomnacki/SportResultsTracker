@@ -21,7 +21,9 @@
             android:label="@string/title_activity_sports_list"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".SportEditActivity" />
-        <activity android:name=".RecordEditActivity"></activity>
+        <activity
+            android:name=".RecordEditActivity"
+            android:windowSoftInputMode="stateHidden" />
     </application>
 
 </manifest>
