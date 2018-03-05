@@ -12,11 +12,15 @@ class User {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = UserConsts.ID)
-    var id: Long? = null
+    private var id: Long? = null
 
     @ColumnInfo(name = UserConsts.NAME)
     var name: String? = null
 
     @ColumnInfo(name = UserConsts.SPORTS_AMOUNT)
     var sportsAmount: Long? = null
+
+    override fun toString(): String {
+        return id.toString() + " " + name.toString() + " " + sportsAmount.toString()
+    }
 }

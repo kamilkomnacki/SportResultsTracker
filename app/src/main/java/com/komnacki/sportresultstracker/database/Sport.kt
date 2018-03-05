@@ -14,7 +14,7 @@ import android.arch.persistence.room.PrimaryKey
 class Sport {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = SportConsts.ID)
-    var id: Long? = null
+    private var id: Long? = null
 
     @ColumnInfo(name = SportConsts.USER_ID)
     var user_id: Long? = null
@@ -22,8 +22,17 @@ class Sport {
     @ColumnInfo(name = SportConsts.NAME)
     var name: String? = null
 
-    @ColumnInfo(name = SportConsts.NAME)
-    var hasTime: String? = null
+    @ColumnInfo(name = SportConsts.HAS_TIME)
+    var hasTime: Boolean? = null
+
+    @ColumnInfo(name = SportConsts.HAS_DISTANCE)
+    var hasDistance: Boolean? = null
+
+    @ColumnInfo(name = SportConsts.HAS_REPEAT)
+    var hasRepeat: Boolean? = null
+
+    @ColumnInfo(name = SportConsts.HAS_WEIGHT)
+    var hasWeight: Boolean? = null
 
     @ColumnInfo(name = SportConsts.RECORDS_AMOUNT)
     var recordsAmount: Long? = null
