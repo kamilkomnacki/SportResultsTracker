@@ -11,4 +11,6 @@ interface SportDAO {
 
     @Query("SELECT * FROM " + SportConsts.TABLE_NAME)
     fun getAll(): List<Sport>
+
+
 }

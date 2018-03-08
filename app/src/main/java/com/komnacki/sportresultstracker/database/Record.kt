@@ -13,7 +13,7 @@ import java.util.*
 class Record {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = RecordConsts.ID)
-    private var id: Long? = null
+    protected var id: Long? = null
 
     @ColumnInfo(name = RecordConsts.SPORT_ID)
     var sport_id: Long? = null

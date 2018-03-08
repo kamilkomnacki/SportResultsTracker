@@ -12,7 +12,7 @@ class User {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = UserConsts.ID)
-    private var id: Long? = null
+    protected var id: Long? = null
 
     @ColumnInfo(name = UserConsts.NAME)
     var name: String? = null
