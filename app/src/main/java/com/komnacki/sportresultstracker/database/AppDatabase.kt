@@ -10,16 +10,6 @@ import java.security.AccessControlContext
         version = 1,
         entities = [(Record::class), (Sport::class), (User::class)])
 abstract class AppDatabase : RoomDatabase() {
-    companion object {
-        const val DATABASE_NAME = "database_SportResultTracker"
-        fun createPersistentDatabase(context: Context): AppDatabase
-            = Room.databaseBuilder(
-                context.applicationContext,
-                AppDatabase::class.java,
-                DATABASE_NAME
-        ).build()
-    }
-
     abstract fun userDAO() : UserDAO
     abstract fun sportDAO() : SportDAO
     abstract fun recordDAO() : RecordDAO
