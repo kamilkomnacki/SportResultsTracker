@@ -42,18 +42,10 @@ class SportsListActivity : AppCompatActivity() {
 
 
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
             Request().execute()
-
             val adapter = ArrayAdapter<User>(this, android.R.layout.simple_list_item_1, list3)
             lv_sports.adapter = adapter
         }
-
-        //Request().execute()
-
-
-
     }
 
     inner class Request : AsyncTask<Void, Void, User>() {
