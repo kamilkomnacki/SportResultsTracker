@@ -7,7 +7,7 @@ import android.content.Context
 import java.security.AccessControlContext
 
 @Database(
-        version = 1,
+        version = 2,
         entities = [(Record::class), (Sport::class), (User::class)])
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDAO() : UserDAO

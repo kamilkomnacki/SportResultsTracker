@@ -13,6 +13,7 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = [AppModule::class])
 interface AppComponent{
+    fun inject(userRepository: UserRepository)
     fun inject(sportsListActivity: SportsListActivity)
 
 }
