@@ -1,7 +1,11 @@
 package com.komnacki.sportresultstracker.database
 
+import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.Room
+import android.arch.persistence.room.RoomDatabase
+import android.arch.persistence.room.RoomDatabase.Callback
 import android.content.Context
+import android.os.AsyncTask
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -15,6 +19,7 @@ class AppModule(private val context: Context) {
     fun provideContext(): Context{
         return context
     }
+
 
     @Provides
     @Singleton
@@ -31,4 +36,7 @@ class AppModule(private val context: Context) {
     fun provideUserDAO(database: AppDatabase): UserDAO{
         return database.userDAO()
     }
+
+
+
 }

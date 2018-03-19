@@ -30,8 +30,8 @@ class UserRepository(var application: Application)
     @SuppressLint("StaticFieldLeak")
     private inner class insertAsyncTask(userDAO: UserDAO) : AsyncTask<User, Void, Void>() {
 
-        override fun doInBackground(vararg p0: User?): Void? {
-            userDAO.insert(p0)
+        override fun doInBackground(vararg p0: User): Void? {
+            userDAO.insert(p0.get(0))
             return null
         }
 
