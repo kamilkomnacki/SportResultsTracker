@@ -1,7 +1,7 @@
 package com.komnacki.sportresultstracker.database
 
 
-class SportConsts{
+class SportConsts {
     companion object {
         const val TABLE_NAME = "SPORT"
 

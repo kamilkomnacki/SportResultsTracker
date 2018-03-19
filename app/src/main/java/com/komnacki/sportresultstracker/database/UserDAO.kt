@@ -1,13 +1,13 @@
 package com.komnacki.sportresultstracker.database
 
 import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.*
-import android.arch.persistence.room.OnConflictStrategy.REPLACE
+import android.arch.persistence.room.Dao
+import android.arch.persistence.room.Insert
+import android.arch.persistence.room.Query
 
 
 @Dao
 interface UserDAO {
-
     @Insert
     fun insert(user: User)
 

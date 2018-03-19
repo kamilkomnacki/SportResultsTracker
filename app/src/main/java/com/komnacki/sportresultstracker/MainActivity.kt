@@ -1,8 +1,8 @@
 package com.komnacki.sportresultstracker
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, SportEditActivity::class.java)
             startActivity(intent)
         })
-
 
         buttonToRecordEdit.setOnClickListener(View.OnClickListener {
             val intent = Intent(this, RecordEditActivity::class.java)

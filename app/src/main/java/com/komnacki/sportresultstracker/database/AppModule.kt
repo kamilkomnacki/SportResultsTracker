@@ -1,29 +1,27 @@
 package com.komnacki.sportresultstracker.database
 
-import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.Room
-import android.arch.persistence.room.RoomDatabase
-import android.arch.persistence.room.RoomDatabase.Callback
 import android.content.Context
-import android.os.AsyncTask
+import android.util.Log
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
 @Module
 class AppModule(private val context: Context) {
-    val DATABASE_NAME = "database_SportResultTracker"
+    private val LOG_TAG = AppModule::class.java.name
+    private val DATABASE_NAME = "database_SportResultTracker"
 
     @Provides
     @Singleton
-    fun provideContext(): Context{
+    fun provideContext(): Context {
         return context
     }
 
-
     @Provides
     @Singleton
-    fun provideDatabase(context: Context): AppDatabase{
+    fun provideDatabase(context: Context): AppDatabase {
+        Log.d(LOG_TAG, "Provide new database")
         return Room.databaseBuilder(
                 context,
                 AppDatabase::class.java,
@@ -33,10 +31,8 @@ class AppModule(private val context: Context) {
 
     @Provides
     @Singleton
-    fun provideUserDAO(database: AppDatabase): UserDAO{
+    fun provideUserDAO(database: AppDatabase): UserDAO {
+        Log.d(LOG_TAG, "Provide userDAO")
         return database.userDAO()
     }
-
-
-
 }

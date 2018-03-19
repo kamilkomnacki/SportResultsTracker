@@ -25,9 +25,9 @@ class App : Application() {
     }
 
     companion object {
-        private var app: App? = null
+        private lateinit var app: App
 
-        fun app(): App? {
+        fun app(): App {
             return app
         }
     }
