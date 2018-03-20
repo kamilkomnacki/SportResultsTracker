@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Sport results tracker</string>
     <string name="title_activity_sports_list">SportsListActivity</string>
+    <string name="contentDesc_deleteUser">Delete user</string>
 </resources>

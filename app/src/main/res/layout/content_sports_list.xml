@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.komnacki.sportresultstracker.SportsListActivity"
-    tools:showIn="@layout/activity_sports_list">
+    tools:showIn="@layout/activity_sports_list"
+    android:background="@color/colorPrimaryDark">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_sportsList"
@@ -14,7 +15,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         tools:listitem="@layout/item_sports_list">
-
     </android.support.v7.widget.RecyclerView>
 
 </android.support.constraint.ConstraintLayout>

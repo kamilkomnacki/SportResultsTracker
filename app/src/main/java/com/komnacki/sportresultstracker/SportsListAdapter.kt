@@ -28,7 +28,7 @@ class SportsListAdapter(context: Context) : RecyclerView.Adapter<SportsListAdapt
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (list != null) {
             var current: User = list!!.get(position)
-            holder.sportsListItemView.text = current.name + ", " + current.sportsAmount
+            holder.sportsListItemView.text = current.name
         } else
             holder.sportsListItemView.text = "No users..."
     }
@@ -40,7 +40,7 @@ class SportsListAdapter(context: Context) : RecyclerView.Adapter<SportsListAdapt
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var sportsListItemView: TextView = itemView.findViewById(R.id.tv_sportsList_item)
+        var sportsListItemView: TextView = itemView.findViewById(R.id.item_sportsList_tv_name)
     }
 }
 
