@@ -1,4 +1,5 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="ic_emptyList">136dp</dimen>
     <dimen name="item_sportList_padding">4dp</dimen>
 </resources>
