@@ -6,9 +6,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ListView
+import android.widget.RelativeLayout
 import android.widget.TextView
 import com.komnacki.sportresultstracker.database.User
+import com.komnacki.sportresultstracker.database.UserRepository
 
 class SportsListAdapter(context: Context) : RecyclerView.Adapter<SportsListAdapter.ViewHolder>() {
 
@@ -29,8 +32,18 @@ class SportsListAdapter(context: Context) : RecyclerView.Adapter<SportsListAdapt
         if (list != null) {
             var current: User = list!!.get(position)
             holder.sportsListItemView.text = current.name
-        } else
-            holder.sportsListItemView.text = "No users..."
+            holder.sportsListItemDeleteBtn.setOnClickListener({ view ->
+                deleteItem(current)
+                notifyItemRemoved(position)
+            })
+        }
+    }
+
+
+
+    private fun deleteItem(current: User) {
+        val userRepository = UserRepository()
+        userRepository.delete(current)
     }
 
     fun setUsers(users: List<User>?) {
@@ -41,6 +54,7 @@ class SportsListAdapter(context: Context) : RecyclerView.Adapter<SportsListAdapt
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var sportsListItemView: TextView = itemView.findViewById(R.id.item_sportsList_tv_name)
+        var sportsListItemDeleteBtn: ImageButton = itemView.findViewById(R.id.item_sportsList_btn_delete)
     }
 }
 
