@@ -8,9 +8,11 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.widget.RelativeLayout
 import android.widget.Toast
 import com.komnacki.sportresultstracker.database.User
 import kotlinx.android.synthetic.main.activity_sports_list.*
+import kotlinx.android.synthetic.main.item_sports_list.*
 import java.util.*
 
 
@@ -25,6 +27,7 @@ class SportsListActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         val recyclerView: RecyclerView = findViewById(R.id.rv_sportsList)
+        val emptyView: RelativeLayout = findViewById(R.id.empty_sportsList)
         val adapter = SportsListAdapter(this)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -35,6 +38,8 @@ class SportsListActivity : AppCompatActivity() {
                 adapter.setUsers(t)
             }
         })
+
+        adapter.registerAdapterDataObserver(SportsListEmptyObserver(recyclerView, emptyView))
 
         fab.setOnClickListener { view ->
             val user = User()

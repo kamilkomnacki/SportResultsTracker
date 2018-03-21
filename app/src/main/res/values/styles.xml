@@ -20,7 +20,8 @@
     <!-- FONT STYLES    -->
     <style name="font_emptyView">
         <item name="android:textSize">16sp</item>
-        <item name="android:color">@color/colorPrimaryDark</item>
+        <item name="android:color">@color/colorPrimary</item>
+        <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:layout_centerInParent">true</item>
         <item name="android:fontFamily">@font/montserrat</item>
         <item name="android:fontStyle">italic</item>
