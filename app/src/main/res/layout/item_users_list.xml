@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_usersList"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="@dimen/item_userList_padding">
+
+    <TextView
+        android:id="@+id/item_usersList_tv_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:textColor="@color/colorPrimary"
+        tools:text="Name" />
+
+    <ImageButton
+        android:id="@+id/item_usersList_btn_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:contentDescription="@string/contentDesc_deleteUser"
+        android:padding="@dimen/item_userList_padding"
+        android:gravity="end"
+        android:src="@android:drawable/ic_menu_delete" />
+</LinearLayout>

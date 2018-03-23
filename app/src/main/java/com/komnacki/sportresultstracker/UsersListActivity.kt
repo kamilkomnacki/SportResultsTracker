@@ -11,28 +11,28 @@ import android.util.Log
 import android.widget.RelativeLayout
 import android.widget.Toast
 import com.komnacki.sportresultstracker.database.User
-import kotlinx.android.synthetic.main.activity_sports_list.*
+import kotlinx.android.synthetic.main.activity_users_list.*
 import java.util.*
 
 
-class SportsListActivity : AppCompatActivity() {
+class UsersListActivity : AppCompatActivity() {
 
-    val LOG_TAG = SportsListAdapter::class.java.name
-    lateinit var sportsListViewModel: SportsListViewModel
+    val LOG_TAG = UsersListAdapter::class.java.name
+    lateinit var usersListViewModel: UsersListViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sports_list)
+        setContentView(R.layout.activity_users_list)
         setSupportActionBar(toolbar)
 
-        val recyclerView: RecyclerView = findViewById(R.id.rv_sportsList)
-        val emptyView: RelativeLayout = findViewById(R.id.empty_sportsList)
-        val adapter = SportsListAdapter(this)
+        val recyclerView: RecyclerView = findViewById(R.id.rv_usersList)
+        val emptyView: RelativeLayout = findViewById(R.id.empty_usersList)
+        val adapter = UsersListAdapter(this)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        sportsListViewModel = ViewModelProviders.of(this).get(SportsListViewModel::class.java)
-        sportsListViewModel.getUserList().observe(this, object : Observer<List<User>> {
+        usersListViewModel = ViewModelProviders.of(this).get(UsersListViewModel::class.java)
+        usersListViewModel.getUserList().observe(this, object : Observer<List<User>> {
             override fun onChanged(t: List<User>?) {
                 adapter.setUsers(t)
             }
@@ -44,7 +44,7 @@ class SportsListActivity : AppCompatActivity() {
             val user = User()
             user.name = "User no. " + Random().nextInt(100000)
             user.sportsAmount = Random().nextInt(100000).toLong()
-            sportsListViewModel.insert(user)
+            usersListViewModel.insert(user)
             Log.d(LOG_TAG, "FAB has been clicked.")
             Toast.makeText(applicationContext, "Add new item", Toast.LENGTH_SHORT).show()
         }

@@ -13,8 +13,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         test.setText("Test from MainActivity")
 
-        button.setOnClickListener(View.OnClickListener {
+        buttonToSportsList.setOnClickListener(View.OnClickListener {
             val intent = Intent(this, SportsListActivity::class.java)
+            startActivity(intent)
+        })
+
+        buttonToUsersList.setOnClickListener(View.OnClickListener {
+            val intent = Intent(this, UsersListActivity::class.java)
             startActivity(intent)
         })
 

@@ -18,6 +18,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".UsersListActivity"
+            android:label="@string/title_activity_users_list"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".SportsListActivity"
             android:label="@string/title_activity_sports_list"
             android:theme="@style/AppTheme.NoActionBar" />

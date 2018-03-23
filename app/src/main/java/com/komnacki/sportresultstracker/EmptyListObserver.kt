@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 
 
-class SportsListEmptyObserver(
+class EmptyListObserver(
         private var recyclerView: RecyclerView,
         private var emptyView: View)
     : RecyclerView.AdapterDataObserver() {
@@ -15,7 +15,7 @@ class SportsListEmptyObserver(
 
     private fun checkIfEmpty() {
         if(recyclerView.adapter != null){
-            var isEmptyList = recyclerView.adapter.itemCount == 0
+            val isEmptyList = recyclerView.adapter.itemCount == 0
             if(isEmptyList){
                 emptyView.visibility = View.VISIBLE
                 recyclerView.visibility = View.GONE
