@@ -1,5 +1,6 @@
 package com.komnacki.sportresultstracker
 
+import android.app.AlertDialog
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -7,17 +8,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import android.widget.ListView
-import android.widget.RelativeLayout
 import android.widget.TextView
 import com.komnacki.sportresultstracker.database.User
 import com.komnacki.sportresultstracker.database.UserRepository
 
-class UsersListAdapter(context: Context) : RecyclerView.Adapter<UsersListAdapter.ViewHolder>() {
+class UsersListAdapter(var context: Context) : RecyclerView.Adapter<UsersListAdapter.ViewHolder>() {
 
-    val LOG_TAG = UsersListAdapter::class.java.name
-    var inflater: LayoutInflater = LayoutInflater.from(context)
-    var list: List<User>? = null
+    private val LOG_TAG = UsersListAdapter::class.java.name
+    private var inflater: LayoutInflater = LayoutInflater.from(context)
+    private var list: List<User>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         val itemView = inflater.inflate(R.layout.item_users_list, parent, false)
@@ -32,16 +31,23 @@ class UsersListAdapter(context: Context) : RecyclerView.Adapter<UsersListAdapter
         if (list != null) {
             val current: User = list!!.get(position)
             holder.usersListItemView.text = current.name
-            holder.usersListItemDeleteBtn.setOnClickListener({ view ->
+            holder.usersListItemDeleteBtn.setOnClickListener({
                 deleteItem(current)
-                notifyItemRemoved(position)
             })
         }
     }
 
     private fun deleteItem(current: User) {
-        val userRepository = UserRepository()
-        userRepository.delete(current)
+        val alert = AlertDialog.Builder(context)
+        alert.setTitle("Delete user")
+        alert.setMessage("Are you sure you want to delete user: " + current.name)
+        alert.setPositiveButton(android.R.string.yes) { dialog, position ->
+            val userRepository = UserRepository()
+            userRepository.delete(current)
+            notifyItemRemoved(position)
+        }
+        alert.setNegativeButton(android.R.string.no) { dialog, position -> dialog?.cancel() }
+        alert.show()
     }
 
     fun setUsers(users: List<User>?) {
