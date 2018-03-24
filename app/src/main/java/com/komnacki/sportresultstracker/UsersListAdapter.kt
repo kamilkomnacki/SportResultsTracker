@@ -2,6 +2,7 @@ package com.komnacki.sportresultstracker
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,8 +12,12 @@ import android.widget.ImageButton
 import android.widget.TextView
 import com.komnacki.sportresultstracker.database.User
 import com.komnacki.sportresultstracker.database.UserRepository
+import kotlinx.android.synthetic.main.item_users_list.view.*
 
-class UsersListAdapter(var context: Context) : RecyclerView.Adapter<UsersListAdapter.ViewHolder>() {
+class UsersListAdapter(
+        var context: Context,
+        val itemOnClick: (View, Int, Int) -> Unit)
+    : RecyclerView.Adapter<UsersListAdapter.ViewHolder>() {
 
     private val LOG_TAG = UsersListAdapter::class.java.name
     private var inflater: LayoutInflater = LayoutInflater.from(context)
@@ -20,7 +25,7 @@ class UsersListAdapter(var context: Context) : RecyclerView.Adapter<UsersListAda
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         val itemView = inflater.inflate(R.layout.item_users_list, parent, false)
-        return ViewHolder(itemView)
+        return ViewHolder(itemView).onClick(itemOnClick)//.onClick(itemOnDelete)
     }
 
     override fun getItemCount(): Int {
@@ -54,6 +59,13 @@ class UsersListAdapter(var context: Context) : RecyclerView.Adapter<UsersListAda
         list = users
         notifyDataSetChanged()
         Log.d(LOG_TAG, "Notify data set changed.")
+    }
+
+    fun<T: RecyclerView.ViewHolder> T.onClick(event: (view: View, type: Int, position: Int) -> Unit): T {
+        itemView.item_usersList_tv_name.setOnClickListener{
+            event.invoke(it, itemViewType, adapterPosition)
+        }
+        return this
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

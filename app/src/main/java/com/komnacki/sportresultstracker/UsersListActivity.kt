@@ -3,11 +3,13 @@ package com.komnacki.sportresultstracker
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.View
 import android.widget.RelativeLayout
 import android.widget.Toast
 import com.komnacki.sportresultstracker.database.User
@@ -17,7 +19,7 @@ import java.util.*
 
 class UsersListActivity : AppCompatActivity() {
 
-    val LOG_TAG = UsersListAdapter::class.java.name
+    private val LOG_TAG = UsersListAdapter::class.java.name
     lateinit var usersListViewModel: UsersListViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +29,11 @@ class UsersListActivity : AppCompatActivity() {
 
         val recyclerView: RecyclerView = findViewById(R.id.rv_usersList)
         val emptyView: RelativeLayout = findViewById(R.id.empty_usersList)
-        val adapter = UsersListAdapter(this)
+        val itemOnClick: (View, Int, Int) -> Unit = { recyclerView, type, position ->
+            val intent = Intent(this, SportsListActivity::class.java)
+            startActivity(intent)
+        }
+        val adapter = UsersListAdapter(this, itemOnClick)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
