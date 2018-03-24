@@ -9,11 +9,14 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.Toast
 import com.komnacki.sportresultstracker.database.User
 import kotlinx.android.synthetic.main.activity_users_list.*
+import kotlinx.android.synthetic.main.alert_dialog_user_input.*
+import kotlinx.android.synthetic.main.alert_dialog_user_input.view.*
 import java.util.*
 
 
@@ -47,12 +50,33 @@ class UsersListActivity : AppCompatActivity() {
         adapter.registerAdapterDataObserver(EmptyListObserver(recyclerView, emptyView))
 
         fab.setOnClickListener { view ->
-            val user = User()
-            user.name = "User no. " + Random().nextInt(100000)
-            user.sportsAmount = Random().nextInt(100000).toLong()
-            usersListViewModel.insert(user)
+            insertNewUserDialog()
             Log.d(LOG_TAG, "FAB has been clicked.")
             Toast.makeText(applicationContext, "Add new item", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun insertNewUserDialog(){
+        val alert = android.app.AlertDialog.Builder(this)
+        alert.setTitle("Add new user")
+        val viewInflated =
+                LayoutInflater
+                        .from(this)
+                        .inflate(R.layout.alert_dialog_user_input,
+                                fl_alert_dialog_user_input,
+                                false)
+
+        val input = viewInflated.tv_input_user
+        alert.setView(viewInflated)
+
+        alert.setPositiveButton(android.R.string.yes) { dialog, position ->
+            val name = input.text.toString()
+            val user = User()
+            user.name = name
+            user.sportsAmount = Random().nextInt(100000).toLong()
+            usersListViewModel.insert(user)
+        }
+        alert.setNegativeButton(android.R.string.no) { dialog, position -> dialog?.cancel() }
+        alert.show()
     }
 }

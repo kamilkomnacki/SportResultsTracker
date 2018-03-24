@@ -7,4 +7,5 @@
     <string name="empty_usersList">The list of users is empty…</string>
     <string name="empty_usersList_contentDescription">Add some users by tapped add button below</string>
     <string name="title_activity_users_list">UsersListActivity</string>
+    <string name="hint_name">Name</string>
 </resources>
