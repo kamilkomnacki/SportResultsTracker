@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.Toast
+import com.komnacki.sportresultstracker.database.SportConsts
 import com.komnacki.sportresultstracker.database.User
 import kotlinx.android.synthetic.main.activity_users_list.*
 import kotlinx.android.synthetic.main.alert_dialog_user_input.*
@@ -32,8 +33,9 @@ class UsersListActivity : AppCompatActivity() {
 
         val recyclerView: RecyclerView = findViewById(R.id.rv_usersList)
         val emptyView: RelativeLayout = findViewById(R.id.empty_usersList)
-        val itemOnClick: (View, Int, Int) -> Unit = { recyclerView, type, position ->
+        val itemOnClick: (View, Int, Int, Long?) -> Unit = { recyclerView, type, position, id ->
             val intent = Intent(this, SportsListActivity::class.java)
+            intent.putExtra(SportConsts.USER_ID, id)
             startActivity(intent)
         }
         val adapter = UsersListAdapter(this, itemOnClick)

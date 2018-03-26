@@ -1,25 +1,21 @@
 package com.komnacki.sportresultstracker
 
-import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.util.Log
-import com.komnacki.sportresultstracker.database.User
-import com.komnacki.sportresultstracker.database.UserRepository
+import com.komnacki.sportresultstracker.database.Sport
+import com.komnacki.sportresultstracker.database.SportRepository
 
 
-class SportsListViewModel(application: Application) : AndroidViewModel(application) {
+class SportsListViewModel : ViewModel() {
 
-    private var userRepository = UserRepository()
-    private var listOfUsers = userRepository.getAll()
+    private var sportRepository = SportRepository()
+    private var listOfSports = sportRepository.getAll(286)
 
-    fun insert(user: User){
-        userRepository.insert(user)
+    fun insert(sport: Sport) {
+        sportRepository.insert(sport)
     }
 
-    fun getUserList(): LiveData<List<User>>{
-        return listOfUsers
+    fun getSportsList(): LiveData<List<Sport>> {
+        return listOfSports
     }
 }

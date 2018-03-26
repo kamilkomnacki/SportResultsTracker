@@ -7,20 +7,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import android.widget.ListView
-import android.widget.RelativeLayout
 import android.widget.TextView
-import com.komnacki.sportresultstracker.database.User
-import com.komnacki.sportresultstracker.database.UserRepository
+import com.komnacki.sportresultstracker.database.Sport
+import com.komnacki.sportresultstracker.database.SportRepository
 
 class SportsListAdapter(context: Context) : RecyclerView.Adapter<SportsListAdapter.ViewHolder>() {
 
-    val LOG_TAG = SportsListAdapter::class.java.name
-    var inflater: LayoutInflater = LayoutInflater.from(context)
-    var list: List<User>? = null
+    private val LOG_TAG = SportsListAdapter::class.java.name
+    private var inflater: LayoutInflater = LayoutInflater.from(context)
+    var list: List<Sport>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        var itemView = inflater.inflate(R.layout.item_sports_list, parent, false)
+        val itemView = inflater.inflate(R.layout.item_sports_list, parent, false)
         return ViewHolder(itemView)
     }
 
@@ -30,7 +28,7 @@ class SportsListAdapter(context: Context) : RecyclerView.Adapter<SportsListAdapt
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (list != null) {
-            var current: User = list!!.get(position)
+            val current: Sport = list!!.get(position)
             holder.sportsListItemView.text = current.name
             holder.sportsListItemDeleteBtn.setOnClickListener({ view ->
                 deleteItem(current)
@@ -40,14 +38,13 @@ class SportsListAdapter(context: Context) : RecyclerView.Adapter<SportsListAdapt
     }
 
 
-
-    private fun deleteItem(current: User) {
-        val userRepository = UserRepository()
-        userRepository.delete(current)
+    private fun deleteItem(current: Sport) {
+        val sportRepository = SportRepository()
+        sportRepository.delete(current)
     }
 
-    fun setUsers(users: List<User>?) {
-        list = users
+    fun setSports(sports: List<Sport>?) {
+        list = sports
         notifyDataSetChanged()
         Log.d(LOG_TAG, "Notify data set changed.")
     }

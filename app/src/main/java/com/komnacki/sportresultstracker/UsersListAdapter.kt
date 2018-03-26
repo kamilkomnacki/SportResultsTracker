@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.item_users_list.view.*
 
 class UsersListAdapter(
         var context: Context,
-        val itemOnClick: (View, Int, Int) -> Unit)
+        val itemOnClick: (View, Int, Int, Long?) -> Unit)
     : RecyclerView.Adapter<UsersListAdapter.ViewHolder>() {
 
     private val LOG_TAG = UsersListAdapter::class.java.name
@@ -25,7 +25,7 @@ class UsersListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         val itemView = inflater.inflate(R.layout.item_users_list, parent, false)
-        return ViewHolder(itemView).onClick(itemOnClick)//.onClick(itemOnDelete)
+        return ViewHolder(itemView).onClick(itemOnClick)
     }
 
     override fun getItemCount(): Int {
@@ -35,7 +35,7 @@ class UsersListAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (list != null) {
             val current: User = list!!.get(position)
-            holder.usersListItemView.text = current.name
+            holder.usersListItemView.text = current.id.toString() + " - " + current.name
             holder.usersListItemDeleteBtn.setOnClickListener({
                 deleteItem(current)
             })
@@ -61,9 +61,10 @@ class UsersListAdapter(
         Log.d(LOG_TAG, "Notify data set changed.")
     }
 
-    fun<T: RecyclerView.ViewHolder> T.onClick(event: (view: View, type: Int, position: Int) -> Unit): T {
+    fun<T: RecyclerView.ViewHolder> T.onClick(event: (view: View, type: Int, position: Int, id: Long?) -> Unit): T {
         itemView.item_usersList_tv_name.setOnClickListener{
-            event.invoke(it, itemViewType, adapterPosition)
+            val id = list!!.get(adapterPosition).id
+            event.invoke(it, itemViewType, adapterPosition, id)
         }
         return this
     }

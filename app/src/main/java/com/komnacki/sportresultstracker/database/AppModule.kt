@@ -32,7 +32,14 @@ class AppModule(private val context: Context) {
     @Provides
     @Singleton
     fun provideUserDAO(database: AppDatabase): UserDAO {
-        Log.d(LOG_TAG, "Provide userDAO")
+        Log.d(LOG_TAG, "Provide sportDAO")
         return database.userDAO()
+    }
+
+    @Provides
+    @Singleton
+    fun provideSportDAO(database: AppDatabase): SportDAO {
+        Log.d(LOG_TAG, "Provide sportDAO")
+        return database.sportDAO()
     }
 }
