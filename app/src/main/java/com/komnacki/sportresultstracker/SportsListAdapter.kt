@@ -11,7 +11,10 @@ import android.widget.TextView
 import com.komnacki.sportresultstracker.database.Sport
 import com.komnacki.sportresultstracker.database.SportRepository
 
-class SportsListAdapter(context: Context) : RecyclerView.Adapter<SportsListAdapter.ViewHolder>() {
+class SportsListAdapter(
+        val context: Context,
+        val itemOnClick: (View, Int, Int, Long?) -> Unit)
+        : RecyclerView.Adapter<SportsListAdapter.ViewHolder>() {
 
     private val LOG_TAG = SportsListAdapter::class.java.name
     private var inflater: LayoutInflater = LayoutInflater.from(context)
@@ -19,7 +22,7 @@ class SportsListAdapter(context: Context) : RecyclerView.Adapter<SportsListAdapt
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         val itemView = inflater.inflate(R.layout.item_sports_list, parent, false)
-        return ViewHolder(itemView)
+        return ViewHolder(itemView).onClick(itemOnClick)
     }
 
     override fun getItemCount(): Int {
@@ -37,7 +40,6 @@ class SportsListAdapter(context: Context) : RecyclerView.Adapter<SportsListAdapt
         }
     }
 
-
     private fun deleteItem(current: Sport) {
         val sportRepository = SportRepository()
         sportRepository.delete(current)
@@ -47,6 +49,14 @@ class SportsListAdapter(context: Context) : RecyclerView.Adapter<SportsListAdapt
         list = sports
         notifyDataSetChanged()
         Log.d(LOG_TAG, "Notify data set changed.")
+    }
+
+    fun<T: RecyclerView.ViewHolder> T.onClick(event: (view: View, type: Int, position: Int, id: Long?) -> Unit): T {
+        itemView.setOnClickListener{
+            val id = list!!.get(adapterPosition).id
+            event.invoke(it, itemViewType, adapterPosition, id)
+        }
+        return this
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

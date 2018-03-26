@@ -12,7 +12,6 @@ import android.widget.ImageButton
 import android.widget.TextView
 import com.komnacki.sportresultstracker.database.User
 import com.komnacki.sportresultstracker.database.UserRepository
-import kotlinx.android.synthetic.main.item_users_list.view.*
 
 class UsersListAdapter(
         var context: Context,
@@ -62,7 +61,7 @@ class UsersListAdapter(
     }
 
     fun<T: RecyclerView.ViewHolder> T.onClick(event: (view: View, type: Int, position: Int, id: Long?) -> Unit): T {
-        itemView.item_usersList_tv_name.setOnClickListener{
+        itemView.setOnClickListener{
             val id = list!!.get(adapterPosition).id
             event.invoke(it, itemViewType, adapterPosition, id)
         }

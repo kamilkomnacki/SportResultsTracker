@@ -14,7 +14,7 @@ import android.arch.persistence.room.PrimaryKey
 class Sport {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = SportConsts.ID)
-    protected var id: Long? = null
+    var id: Long? = null
 
     @ColumnInfo(name = SportConsts.USER_ID)
     var user_id: Long? = null

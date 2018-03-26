@@ -6,7 +6,6 @@ import android.arch.lifecycle.ViewModel
 import com.komnacki.sportresultstracker.database.Sport
 import com.komnacki.sportresultstracker.database.SportRepository
 
-
 class SportsListViewModel(aplication: Application, userId: Long) : ViewModel() {
 
     private var sportRepository = SportRepository()
@@ -18,5 +17,13 @@ class SportsListViewModel(aplication: Application, userId: Long) : ViewModel() {
 
     fun getSportsList(): LiveData<List<Sport>> {
         return listOfSports
+    }
+
+    fun isNameExist(name: String): Boolean{
+        for(element in listOfSports.value.orEmpty()){
+            if(element.name == name)
+                return true
+        }
+        return false
     }
 }
