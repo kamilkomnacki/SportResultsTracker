@@ -35,7 +35,8 @@ class SportsListActivity : AppCompatActivity() {
         val userId = intent.getLongExtra(SportConsts.USER_ID, 0)
         Log.d(LOG_TAG, "INTENT EXTRA = " + userId)
 
-        sportsListViewModel = ViewModelProviders.of(this)
+        sportsListViewModel = ViewModelProviders
+                .of(this, SportsListFactory(this.application, userId))
                 .get(SportsListViewModel::class.java)
         sportsListViewModel.getSportsList().observe(this, object : Observer<List<Sport>> {
             override fun onChanged(t: List<Sport>?) {
