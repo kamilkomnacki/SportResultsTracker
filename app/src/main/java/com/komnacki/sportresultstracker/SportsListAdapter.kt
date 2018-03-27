@@ -13,7 +13,8 @@ import com.komnacki.sportresultstracker.database.SportRepository
 
 class SportsListAdapter(
         val context: Context,
-        val itemOnClick: (View, Int, Int, Long?) -> Unit)
+        val itemOnClick: (View, Int, Int, Long?) -> Unit,
+        val itemOnLongClick: (View, Int, Int, Long?) -> Boolean)
         : RecyclerView.Adapter<SportsListAdapter.ViewHolder>() {
 
     private val LOG_TAG = SportsListAdapter::class.java.name
@@ -22,7 +23,7 @@ class SportsListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         val itemView = inflater.inflate(R.layout.item_sports_list, parent, false)
-        return ViewHolder(itemView).onClick(itemOnClick)
+        return ViewHolder(itemView).onLongClick(itemOnLongClick).onClick(itemOnClick)
     }
 
     override fun getItemCount(): Int {
@@ -53,6 +54,14 @@ class SportsListAdapter(
 
     fun<T: RecyclerView.ViewHolder> T.onClick(event: (view: View, type: Int, position: Int, id: Long?) -> Unit): T {
         itemView.setOnClickListener{
+            val id = list!!.get(adapterPosition).id
+            event.invoke(it, itemViewType, adapterPosition, id)
+        }
+        return this
+    }
+
+    fun<T: RecyclerView.ViewHolder> T.onLongClick(event: (view: View, type: Int, position: Int, id: Long?) -> Boolean): T {
+        itemView.setOnLongClickListener{
             val id = list!!.get(adapterPosition).id
             event.invoke(it, itemViewType, adapterPosition, id)
         }

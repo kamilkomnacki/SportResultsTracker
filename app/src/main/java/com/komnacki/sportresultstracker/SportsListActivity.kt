@@ -33,11 +33,14 @@ class SportsListActivity : AppCompatActivity() {
         val recyclerView: RecyclerView = findViewById(R.id.rv_sportsList)
         val emptyView: RelativeLayout = findViewById(R.id.empty_sportsList)
         val itemOnClick: (View, Int, Int, Long?) -> Unit = { recyclerView, type, position, id ->
+            Toast.makeText(this, "Short click", Toast.LENGTH_SHORT).show()
+        }
+        val itemOnLongClick: (View, Int, Int, Long?) -> Boolean = { recyclerView, type, position, id ->
             val intent = Intent(this, SportEditActivity::class.java)
             intent.putExtra(SportConsts.ID, id)
-            startActivity(intent)
+            Unit.equals(startActivity(intent))
         }
-        val adapter = SportsListAdapter(this, itemOnClick)
+        val adapter = SportsListAdapter(this, itemOnClick, itemOnLongClick)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
