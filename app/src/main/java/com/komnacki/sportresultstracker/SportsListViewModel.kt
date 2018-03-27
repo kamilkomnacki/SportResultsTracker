@@ -15,13 +15,25 @@ class SportsListViewModel(aplication: Application, userId: Long) : ViewModel() {
         sportRepository.insert(sport)
     }
 
+    fun update(sport: Sport) {
+        sportRepository.update(sport)
+    }
+
+    fun getSport(id: Long?): Sport{
+        for(sport in listOfSports.value.orEmpty()){
+            if(sport.id == id)
+                return sport
+        }
+        return Sport()
+    }
+
     fun getSportsList(): LiveData<List<Sport>> {
         return listOfSports
     }
 
     fun isNameExist(name: String): Boolean{
-        for(element in listOfSports.value.orEmpty()){
-            if(element.name == name)
+        for(sport in listOfSports.value.orEmpty()){
+            if(sport.name == name)
                 return true
         }
         return false

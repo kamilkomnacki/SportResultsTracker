@@ -9,6 +9,7 @@ import com.komnacki.sportresultstracker.database.SportConsts
 class SportEditActivity : AppCompatActivity() {
 
     val LOG_TAG = SportEditActivity::class.java.name
+    private lateinit var sportsListViewModel: SportsListViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

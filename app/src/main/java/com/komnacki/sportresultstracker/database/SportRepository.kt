@@ -25,6 +25,10 @@ class SportRepository {
         insertAsyncTask().execute(sport)
     }
 
+    fun update(sport: Sport){
+        updateAsyncTask().execute(sport)
+    }
+
     fun delete(sport: Sport) {
         deleteAsyncTask().execute(sport)
     }
@@ -34,10 +38,22 @@ class SportRepository {
         return sportDAO.getAll(userId)
     }
 
+    fun get(id: Long): LiveData<Sport>{
+        return sportDAO.get(id)
+    }
+
     @SuppressLint("StaticFieldLeak")
     private inner class insertAsyncTask() : AsyncTask<Sport, Void, Void>() {
         override fun doInBackground(vararg p0: Sport): Void? {
             sportDAO.insert(p0.get(0))
+            return null
+        }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private inner class updateAsyncTask() : AsyncTask<Sport, Void, Void>() {
+        override fun doInBackground(vararg p0: Sport): Void? {
+            sportDAO.update(p0[0])
             return null
         }
     }
