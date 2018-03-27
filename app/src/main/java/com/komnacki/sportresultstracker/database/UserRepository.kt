@@ -1,10 +1,8 @@
 package com.komnacki.sportresultstracker.database
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.arch.lifecycle.LiveData
 import android.os.AsyncTask
-import android.util.Log
 import com.komnacki.sportresultstracker.App
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -22,6 +20,10 @@ class UserRepository() {
 
     fun insert(user: User) {
         insertAsyncTask().execute(user)
+    }
+
+    fun update(user: User){
+        updateAsyncTask().execute(user)
     }
 
     fun delete(user: User){
@@ -44,6 +46,14 @@ class UserRepository() {
     private inner class deleteAsyncTask() : AsyncTask<User, Void, Void>() {
         override fun doInBackground(vararg p0: User): Void? {
             userDAO.delete(p0[0])
+            return null
+        }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private inner class updateAsyncTask() : AsyncTask<User, Void, Void>() {
+        override fun doInBackground(vararg p0: User): Void? {
+            userDAO.update(p0[0])
             return null
         }
     }

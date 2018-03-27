@@ -3,9 +3,6 @@ package com.komnacki.sportresultstracker
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
-import android.util.Log
 import com.komnacki.sportresultstracker.database.User
 import com.komnacki.sportresultstracker.database.UserRepository
 
@@ -21,5 +18,25 @@ class UsersListViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun getUserList(): LiveData<List<User>>{
         return listOfUsers
+    }
+
+    fun update(user: User) {
+        userRepository.update(user)
+    }
+
+    fun getUser(id: Long?): User {
+        for(user in listOfUsers.value.orEmpty()){
+            if(user.id == id)
+                return user
+        }
+        return User()
+    }
+
+    fun isNameExist(name: String): Boolean{
+        for(sport in listOfUsers.value.orEmpty()){
+            if(sport.name == name)
+                return true
+        }
+        return false
     }
 }
