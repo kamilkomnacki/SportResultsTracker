@@ -16,8 +16,8 @@ import android.widget.Toast
 import com.komnacki.sportresultstracker.database.Sport
 import com.komnacki.sportresultstracker.database.SportConsts
 import kotlinx.android.synthetic.main.activity_sports_list.*
+import kotlinx.android.synthetic.main.alert_dialog_sport_input.*
 import kotlinx.android.synthetic.main.alert_dialog_sport_input.view.*
-import kotlinx.android.synthetic.main.alert_dialog_user_input.*
 
 
 class SportsListActivity : AppCompatActivity() {
@@ -71,7 +71,7 @@ class SportsListActivity : AppCompatActivity() {
         val viewInflated = LayoutInflater
                 .from(this)
                 .inflate(R.layout.alert_dialog_sport_input,
-                        fl_alert_dialog_user_input,
+                        fl_alert_dialog_sport_input,
                         false)
         alert.setView(viewInflated)
 

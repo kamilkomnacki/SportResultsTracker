@@ -38,6 +38,9 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:1.1.0"
     kapt "android.arch.lifecycle:compiler:1.1.0"
 
+    //Masks for EditText
+    compile 'com.redmadrobot:inputmask:2.3.0'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'

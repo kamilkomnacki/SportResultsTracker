@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         buttonToRecordEdit.setOnClickListener(View.OnClickListener {
-            val intent = Intent(this, RecordEditActivity::class.java)
+            val intent = Intent(this, ChartsActivity::class.java)
             startActivity(intent)
         })
     }

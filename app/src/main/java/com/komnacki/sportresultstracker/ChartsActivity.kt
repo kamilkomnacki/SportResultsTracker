@@ -42,8 +42,7 @@ class ChartsActivity : AppCompatActivity() {
         container.adapter = mSectionsPagerAdapter
 
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+            showRecordEditDialog()
         }
 
     }
@@ -66,6 +65,12 @@ class ChartsActivity : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun showRecordEditDialog(){
+        val RECORD_INPUT_DIALOG_TAG = RecordInputDialogFragment::class.java.name
+        val recordInputDialogFragment = RecordInputDialogFragment.newInstance("Add new record")
+        recordInputDialogFragment.show(fragmentManager, RECORD_INPUT_DIALOG_TAG)
     }
 
 
