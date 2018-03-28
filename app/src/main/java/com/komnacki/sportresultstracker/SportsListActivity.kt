@@ -3,6 +3,7 @@ package com.komnacki.sportresultstracker
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -33,7 +34,9 @@ class SportsListActivity : AppCompatActivity() {
         val recyclerView: RecyclerView = findViewById(R.id.rv_sportsList)
         val emptyView: RelativeLayout = findViewById(R.id.empty_sportsList)
         val itemOnClick: (View, Int, Int, Long?) -> Unit = { recyclerView, type, position, sportId ->
-            Toast.makeText(this, "Short click", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, ChartsActivity::class.java)
+            intent.putExtra(SportConsts.ID, sportId)
+            startActivity(intent)
         }
         val itemOnLongClick: (View, Int, Int, Long?) -> Boolean = { recyclerView, type, position, sportId ->
             Unit.equals(insertNewSport(userId, sportId))
