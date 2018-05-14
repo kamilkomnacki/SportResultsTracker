@@ -1,5 +1,6 @@
 package com.komnacki.sportresultstracker
 
+import android.content.Intent
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 
@@ -13,6 +14,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import com.komnacki.sportresultstracker.database.SportConsts
 
 import kotlinx.android.synthetic.main.activity_charts.*
 import kotlinx.android.synthetic.main.fragment_charts.view.*
@@ -41,8 +44,10 @@ class ChartsActivity : AppCompatActivity() {
         // Set up the ViewPager with the sections adapter.
         container.adapter = mSectionsPagerAdapter
 
-        fab.setOnClickListener { view ->
-            showRecordEditDialog()
+        val sportId: Long = intent.getLongExtra(SportConsts.ID, 0);
+        Toast.makeText(this, "SportID:" + sportId, Toast.LENGTH_SHORT).show()
+
+            fab.setOnClickListener { view -> showRecordEditDialog(sportId)
         }
 
     }
@@ -60,16 +65,21 @@ class ChartsActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         val id = item.itemId
 
-        if (id == R.id.action_settings) {
-            return true
+        when(id){
+            R.id.action_listOfRecords -> {
+                intent = Intent(this, RecordsListActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.action_settings -> return true
         }
+
 
         return super.onOptionsItemSelected(item)
     }
 
-    private fun showRecordEditDialog(){
+    private fun showRecordEditDialog(sportId: Long){
         val RECORD_INPUT_DIALOG_TAG = RecordInputDialogFragment::class.java.name
-        val recordInputDialogFragment = RecordInputDialogFragment.newInstance("Add new record")
+        val recordInputDialogFragment = RecordInputDialogFragment.newInstance("Your record", sportId)
         recordInputDialogFragment.show(fragmentManager, RECORD_INPUT_DIALOG_TAG)
     }
 
@@ -101,6 +111,7 @@ class ChartsActivity : AppCompatActivity() {
                                   savedInstanceState: Bundle?): View? {
             val rootView = inflater.inflate(R.layout.fragment_charts, container, false)
             rootView.section_label.text = getString(R.string.section_format, arguments.getInt(ARG_SECTION_NUMBER))
+            //rootView.section_label.text = getString(R.string.section_format, arguments.getInt(ARG_SECTION_NUMBER))
             return rootView
         }
 

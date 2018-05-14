@@ -42,6 +42,10 @@ class SportRepository {
         return sportDAO.get(id)
     }
 
+    fun hasTime(id: Long): Boolean?{
+        return sportDAO.get(id).value!!.hasTime
+    }
+
     @SuppressLint("StaticFieldLeak")
     private inner class insertAsyncTask() : AsyncTask<Sport, Void, Void>() {
         override fun doInBackground(vararg p0: Sport): Void? {

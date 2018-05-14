@@ -44,9 +44,6 @@ class SportsListActivity : AppCompatActivity() {
         val adapter = SportsListAdapter(this, itemOnClick, itemOnLongClick)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
-
-        Log.d(LOG_TAG, "INTENT EXTRA = " + userId)
-
         sportsListViewModel = ViewModelProviders
                 .of(this, SportsListFactory(this.application, userId))
                 .get(SportsListViewModel::class.java)
@@ -55,6 +52,9 @@ class SportsListActivity : AppCompatActivity() {
                 adapter.setSports(t)
             }
         })
+
+        Log.d(LOG_TAG, "INTENT EXTRA = " + userId)
+
 
         adapter.registerAdapterDataObserver(EmptyListObserver(recyclerView, emptyView))
 

@@ -8,5 +8,6 @@ import javax.inject.Singleton
 interface AppComponent {
     fun inject(userRepository: UserRepository)
     fun inject(sportRepository: SportRepository)
+    fun inject(recordRepository: RecordRepository)
     //fun inject(sportsListActivity: SportsListActivity)
 }

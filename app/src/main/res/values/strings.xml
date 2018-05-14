@@ -3,6 +3,8 @@
     <string name="title_activity_sports_list">SportsListActivity</string>
     <string name="empty_sportsList">The list of your sports is empty…</string>
     <string name="empty_sportsList_contentDescription">Add some sports by tapped add button below</string>
+    <string name="empty_recordsList">The list of your records is empty…</string>
+    <string name="empty_recordsList_contentDescription">Add some records</string>
     <string name="contentDesc_deleteUser">Delete user</string>
     <string name="empty_usersList">The list of users is empty…</string>
     <string name="empty_usersList_contentDescription">Add some users by tapped add button below</string>
@@ -11,4 +13,5 @@
     <string name="title_activity_charts">ChartsActivity</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="action_listOfRecords">List of records</string>
 </resources>

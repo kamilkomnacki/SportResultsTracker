@@ -3,22 +3,33 @@ package com.komnacki.sportresultstracker
 import android.app.AlertDialog
 import android.app.Dialog
 import android.app.DialogFragment
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
+import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
+import android.widget.Toast
+import com.komnacki.sportresultstracker.database.*
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import kotlinx.android.synthetic.main.alert_dialog_record_input.*
 import kotlinx.android.synthetic.main.alert_dialog_record_input.view.*
+import kotlinx.android.synthetic.main.alert_dialog_sport_input.view.*
 
 
 class RecordInputDialogFragment : DialogFragment() {
 
+    private lateinit var sportsListViewModel: SportsListViewModel
+
     companion object {
         private val ARG_TITLE: String = "TITLE"
 
-        fun newInstance(title: String) : RecordInputDialogFragment{
+
+        fun newInstance(title: String, sportId: Long) : RecordInputDialogFragment{
             var fragment: RecordInputDialogFragment = RecordInputDialogFragment()
             val args = Bundle()
             args.putString(ARG_TITLE, title)
+            args.putLong(RecordConsts.SPORT_ID, sportId)
             fragment.arguments = args
             return fragment
         }
@@ -26,13 +37,20 @@ class RecordInputDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val title = arguments.getString(ARG_TITLE)
+ //       val sportId: Long = arguments.getLong(SportConsts.ID)
+
         val alert = AlertDialog.Builder(activity)
         val viewInflated = LayoutInflater
                 .from(activity)
                 .inflate(R.layout.alert_dialog_record_input,
                         sv_alert_dialog_record_edit,
                         false)
+
+        //Wyświetlaj tylko te pola co są zaznaczone w danym sporcie
         val etTime = viewInflated.et_time_recordEdit
+        val etDistance = viewInflated.et_distance_recordEdit
+
+
         val etTime_Listener = MaskedTextChangedListener(
                 "##:##:##:###",
                 true,
@@ -44,16 +62,24 @@ class RecordInputDialogFragment : DialogFragment() {
                     }
                 }
         )
-        et_time_recordEdit.addTextChangedListener(etTime_Listener)
-        et_time_recordEdit.setOnFocusChangeListener(etTime_Listener)
+        //COS TU NIE DZIALALO JAK PRZYSZEDLEM... @TODO("not implemented")
+        // etTime.addTextChangedListener(etTime_Listener)
+       //etTime.onFocusChangeListener = etTime_Listener
+       // et_time_recordEdit.addTextChangedListener(etTime_Listener)
+       // et_time_recordEdit.onFocusChangeListener = etTime_Listener
 
         alert.setView(viewInflated)
         alert.setTitle(title)
 
 
 
+
         alert.setPositiveButton(android.R.string.yes) { dialog, position ->
 //            val name = viewInflated.tv_input_sport.text.toString()
+            val time = etTime.text.toString()
+            val distacne = etDistance.text.toString()
+
+
 //            if(!isNameExist(name)) {
 //                sport.name = viewInflated.tv_input_sport.text.toString()
 //                sport.recordsAmount = sport.recordsAmount

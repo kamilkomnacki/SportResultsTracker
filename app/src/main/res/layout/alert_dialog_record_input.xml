@@ -43,6 +43,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Time format: hh:mm:ss:msc"
+            android:inputType="time"
             />
 
         <EditText
@@ -60,6 +61,7 @@
             android:ems="10"
             android:layout_weight="1"
             android:hint="Number of repetitions"
+            android:visibility="gone"
             android:inputType="numberDecimal" />
 
         <EditText
@@ -69,6 +71,7 @@
             android:ems="10"
             android:layout_weight="1"
             android:hint="Weight"
+            android:visibility="gone"
             android:inputType="numberDecimal" />
     </LinearLayout>
 </ScrollView>

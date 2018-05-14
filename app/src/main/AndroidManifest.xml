@@ -27,12 +27,12 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".SportEditActivity" />
         <activity
-            android:name=".RecordEditActivity"
-            android:windowSoftInputMode="stateHidden" />
+            android:name=".RecordsListActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ChartsActivity"
             android:label="@string/title_activity_charts"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
