@@ -15,6 +15,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.komnacki.sportresultstracker.database.RecordConsts
 import com.komnacki.sportresultstracker.database.SportConsts
 
 import kotlinx.android.synthetic.main.activity_charts.*
@@ -31,6 +32,7 @@ class ChartsActivity : AppCompatActivity() {
      * [android.support.v4.app.FragmentStatePagerAdapter].
      */
     private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
+    private var sportId: Long = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,10 +46,12 @@ class ChartsActivity : AppCompatActivity() {
         // Set up the ViewPager with the sections adapter.
         container.adapter = mSectionsPagerAdapter
 
-        val sportId: Long = intent.getLongExtra(SportConsts.ID, 0);
+        sportId = intent.getLongExtra(SportConsts.ID, -1);
         Toast.makeText(this, "SportID:" + sportId, Toast.LENGTH_SHORT).show()
 
-            fab.setOnClickListener { view -> showRecordEditDialog(sportId)
+            fab.setOnClickListener {
+
+                //view -> showRecordEditDialog(sportId)
         }
 
     }
@@ -68,6 +72,7 @@ class ChartsActivity : AppCompatActivity() {
         when(id){
             R.id.action_listOfRecords -> {
                 intent = Intent(this, RecordsListActivity::class.java)
+                intent.putExtra(RecordConsts.SPORT_ID, sportId)
                 startActivity(intent)
             }
             R.id.action_settings -> return true
@@ -78,9 +83,9 @@ class ChartsActivity : AppCompatActivity() {
     }
 
     private fun showRecordEditDialog(sportId: Long){
-        val RECORD_INPUT_DIALOG_TAG = RecordInputDialogFragment::class.java.name
-        val recordInputDialogFragment = RecordInputDialogFragment.newInstance("Your record", sportId)
-        recordInputDialogFragment.show(fragmentManager, RECORD_INPUT_DIALOG_TAG)
+//        val RECORD_INPUT_DIALOG_TAG = RecordInputDialogFragment::class.java.name
+//        val recordInputDialogFragment = RecordInputDialogFragment.newInstance("Your record", sportId)
+//        recordInputDialogFragment.show(fragmentManager, RECORD_INPUT_DIALOG_TAG)
     }
 
 

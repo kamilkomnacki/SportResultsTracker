@@ -8,7 +8,7 @@ import java.util.*
         foreignKeys = [(ForeignKey(
                 entity = Sport::class,
                 parentColumns = [(SportConsts.ID)],
-                childColumns = [(RecordConsts.ID)],
+                childColumns = [(RecordConsts.SPORT_ID)],
                 onDelete = ForeignKey.CASCADE))])
 class Record {
     @PrimaryKey(autoGenerate = true)

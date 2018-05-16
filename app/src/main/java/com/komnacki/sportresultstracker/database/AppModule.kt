@@ -1,6 +1,8 @@
 package com.komnacki.sportresultstracker.database
 
+import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.Room
+import android.arch.persistence.room.migration.Migration
 import android.content.Context
 import android.util.Log
 import dagger.Module

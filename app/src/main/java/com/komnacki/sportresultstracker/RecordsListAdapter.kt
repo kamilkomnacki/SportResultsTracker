@@ -32,9 +32,9 @@ class RecordsListAdapter(
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             if (list != null) {
                 val current: Record = list!!.get(position)
-                //holder.RecordsListItemView_date.text = current.date.toString()
-                //holder.RecordListItemView_time.text = current.time.toString()
-                //holder.RecordListItemView_distance.text = current.distance.toString()
+                holder.RecordsListItemView_date.text = current.date.toString()
+                holder.RecordListItemView_time.text = current.time.toString()
+                holder.RecordListItemView_distance.text = current.distance.toString()
                 holder.RecordsListItemDeleteBtn.setOnClickListener({ view ->
                     deleteItem(current)
                     notifyItemRemoved(position)

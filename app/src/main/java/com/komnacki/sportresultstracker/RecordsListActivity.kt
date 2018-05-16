@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
 import android.widget.RelativeLayout
+import android.widget.Toast
 import com.komnacki.sportresultstracker.database.Record
 import com.komnacki.sportresultstracker.database.RecordConsts
 import kotlinx.android.synthetic.main.activity_records_list.*
@@ -28,9 +29,10 @@ class RecordsListActivity : AppCompatActivity() {
         val recyclerView: RecyclerView = findViewById(R.id.rv_recordsList)
         val emptyView: RelativeLayout = findViewById(R.id.empty_recordList)
         val itemOnClick: (View, Int, Int, Long?) -> Unit = { recyclerView, type, position, recordId ->
-            val intent = Intent(this, ChartsActivity::class.java)
-            intent.putExtra(RecordConsts.SPORT_ID, recordId)
-            startActivity(intent)
+            showRecordEditDialog(recordsListViewModel.getRecord(recordId))
+//            val intent = Intent(this, ChartsActivity::class.java)
+//            intent.putExtra(RecordConsts.SPORT_ID, recordId)
+//            startActivity(intent)
         }
         val adapter = RecordsListAdapter(this, itemOnClick)
         recyclerView.adapter = adapter
@@ -50,12 +52,21 @@ class RecordsListActivity : AppCompatActivity() {
         adapter.registerAdapterDataObserver(EmptyListObserver(recyclerView, emptyView))
 
 
-        fab.setOnClickListener { view -> showRecordEditDialog(sportId) }
+        fab.setOnClickListener {
+            var record = Record()
+            record.sport_id = sportId
+            showRecordEditDialog(record)
+            Toast.makeText(this, "SportID:"+sportId, Toast.LENGTH_SHORT).show()
+        }
 
     }
-    private fun showRecordEditDialog(sportId: Long){
+    private fun showRecordEditDialog(record: Record){
         val RECORD_INPUT_DIALOG_TAG = RecordInputDialogFragment::class.java.name
-        val recordInputDialogFragment = RecordInputDialogFragment.newInstance("Your record", sportId)
+        val recordInputDialogFragment = RecordInputDialogFragment.newInstance("Your record", record, recordsListViewModel)
         recordInputDialogFragment.show(fragmentManager, RECORD_INPUT_DIALOG_TAG)
+//        if (record.id == null)
+//            recordsListViewModel.insert(record)
+//        else
+//            recordsListViewModel.update(record)
     }
 }
