@@ -43,8 +43,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Time format: hh:mm:ss:msc"
-            android:inputType="time"
-            />
+            android:inputType="time"/>
 
         <EditText
             android:id="@+id/et_distance_recordEdit"
@@ -52,7 +51,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Distance"
-            android:inputType="numberDecimal" />
+            android:inputType="numberSigned" />
 
         <EditText
             android:id="@+id/et_repeat_recordEdit"

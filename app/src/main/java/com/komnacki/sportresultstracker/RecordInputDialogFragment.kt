@@ -11,6 +11,7 @@ import android.text.Editable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.CalendarView
 import android.widget.Toast
 import com.komnacki.sportresultstracker.database.*
 import com.redmadrobot.inputmask.MaskedTextChangedListener
@@ -18,8 +19,12 @@ import kotlinx.android.synthetic.main.alert_dialog_record_input.*
 import kotlinx.android.synthetic.main.alert_dialog_record_input.view.*
 import kotlinx.android.synthetic.main.alert_dialog_sport_input.view.*
 import kotlinx.android.synthetic.main.item_records_list.view.*
-import java.sql.Date
+import java.math.BigDecimal
+import java.math.MathContext
+import java.math.RoundingMode
+import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -34,11 +39,11 @@ class RecordInputDialogFragment : DialogFragment() {
         private lateinit var recordsListViewModel: RecordsListViewModel
 
         fun newInstance(title: String, rec: Record, recListViewModel: RecordsListViewModel) : RecordInputDialogFragment{
+            record = rec
+            recordsListViewModel = recListViewModel
             var fragment: RecordInputDialogFragment = RecordInputDialogFragment()
             val args = Bundle()
             args.putString(ARG_TITLE, title)
-            record = rec
-            recordsListViewModel = recListViewModel
             fragment.arguments = args
             return fragment
         }
@@ -54,30 +59,48 @@ class RecordInputDialogFragment : DialogFragment() {
                         false)
 
         //Wyświetlaj tylko te pola co są zaznaczone w danym sporcie
-        val calendar = viewInflated.calendarEdit
         val etTime = viewInflated.et_time_recordEdit
         val etDistance = viewInflated.et_distance_recordEdit
-
+        val calendar = viewInflated.calendarEdit
 
         if(record.id != null){
             calendar.date = record.date!!.time
-            etTime.setText(record.time.toString())
-            etDistance.setText(record.distance.toString())
+
+            if(!record.time!!.equals(Long.MIN_VALUE))
+                etTime.setText(record.time.toString())
+
+            if(!record.distance!!.equals(Long.MIN_VALUE)) {
+                var distanceDouble: Double = record.distance!!.div(1000.0)
+                etDistance.setText(distanceDouble.toString())
+            }
+        }
+
+        var date: java.util.Date = java.util.Date(calendar.date)
+
+        calendar.setOnDateChangeListener { calendarView, year, month, day ->
+            val newDate = java.util.Date(year-1900,month,day)
+            if(!isEqualDates(date, newDate)) {
+                val timeNow = Calendar.getInstance()
+                val offset = timeNow.get(Calendar.ZONE_OFFSET) + timeNow.get(Calendar.DST_OFFSET)
+                val currentTime = (timeNow.timeInMillis + offset) % (24*60*60*1000)
+
+                val newDateMiliseconds = newDate.time + currentTime
+                date = java.util.Date(newDateMiliseconds)
+            }
         }
 
 
-
-        val etTime_Listener = MaskedTextChangedListener(
-                "##:##:##:###",
-                true,
-                etTime,
-                null,
-                object: MaskedTextChangedListener.ValueListener{
-                    override fun onTextChanged(maskFilled: Boolean, extractedValue: String) {
-                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                    }
-                }
-        )
+//        val etTime_Listener = MaskedTextChangedListener(
+//                "##:##:##:###",
+//                true,
+//                etTime,
+//                null,
+//                object: MaskedTextChangedListener.ValueListener{
+//                    override fun onTextChanged(maskFilled: Boolean, extractedValue: String) {
+//                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+//                    }
+//                }
+//        )
 
         //COS TU NIE DZIALALO JAK PRZYSZEDLEM... @TODO("not implemented")
         // etTime.addTextChangedListener(etTime_Listener)
@@ -88,39 +111,46 @@ class RecordInputDialogFragment : DialogFragment() {
         alert.setView(viewInflated)
         alert.setTitle(title)
 
-
-
         alert.setPositiveButton(android.R.string.yes) { dialog, position ->
-            record.date = java.util.Date(123)
-            record.time = viewInflated.et_time_recordEdit.text.toString().toLong()
-            record.distance = viewInflated.et_distance_recordEdit.text.toString().toLong()
+            record.date = date
 
-            Log.d(LOG_TAG, "date: " + record.date)
-            Log.d(LOG_TAG, "date: " + record.date!!.time)
-            Log.d(LOG_TAG, "time: " + record.time)
-            Log.d(LOG_TAG, "distance: " + record.distance)
+            val etTimeRec = viewInflated.et_time_recordEdit.text
+            if(!fieldIsBlank(etTimeRec)) {
+                record.time = viewInflated.et_time_recordEdit.text.toString().toLong()
+                TODO("Obsłużyć maskę czasu")
+            }
+            else
+                record.time = Long.MIN_VALUE
 
-        if (record.id == null)
-            recordsListViewModel.insert(record)
-        else
-            recordsListViewModel.update(record)
-//            if(!isNameExist(name)) {
-//                sport.name = viewInflated.tv_input_sport.text.toString()
-//                sport.recordsAmount = sport.recordsAmount
-//                sport.user_id = userId
-//                sport.hasTime = viewInflated.cb_hasTime.isChecked
-//                sport.hasDistance = viewInflated.cb_hasDistance.isChecked
-//                sport.hasRepeat = viewInflated.cb_hasRepeat.isChecked
-//                sport.hasWeight = viewInflated.cb_hasWeight.isChecked
-//
-//                if (sport.id == null)
-//                    sportsListViewModel.insert(sport)
-//                else
-//                    sportsListViewModel.update(sport)
-//            }
+            val etDistanceRec = viewInflated.et_distance_recordEdit.text
+            if(!fieldIsBlank(etDistanceRec)) {
+                var distance = viewInflated.et_distance_recordEdit.text.toString().toBigDecimal()
+                distance = distance.multiply(BigDecimal.valueOf(1000))
+                distance = distance.setScale(3, RoundingMode.HALF_EVEN)
+                record.distance = distance.toLong()
+            }
+            else
+                record.distance = Long.MIN_VALUE
+
+            if (record.id == null)
+                recordsListViewModel.insert(record)
+            else
+                recordsListViewModel.update(record)
         }
         alert.setNegativeButton(android.R.string.no) { dialog, position -> dialog?.cancel() }
 
         return alert.create()
+    }
+
+    private fun fieldIsBlank(text: Editable?): Boolean {
+        if(text.isNullOrBlank())
+            return true
+        return false
+    }
+
+    private fun isEqualDates(date: Date, newDate: Date): Boolean {
+        if((date.day != newDate.day) || (date.month != newDate.month) || (date.year != newDate.year))
+            return false
+        return true
     }
 }
