@@ -70,8 +70,12 @@ class RecordInputDialogFragment : DialogFragment() {
                 etTime.setText(record.time.toString())
 
             if(!record.distance!!.equals(Long.MIN_VALUE)) {
-                var distanceDouble: Double = record.distance!!.div(1000.0)
-                etDistance.setText(distanceDouble.toString())
+//                var distanceDouble: Double = record.distance!!.div(1000.0)
+//                etDistance.setText(distanceDouble.toString())
+                var distanceBigDecimal: BigDecimal = record.distance!!
+                        .toBigDecimal()
+                        .movePointLeft(3)
+                etDistance.setText(distanceBigDecimal.toPlainString())
             }
         }
 
@@ -117,7 +121,7 @@ class RecordInputDialogFragment : DialogFragment() {
             val etTimeRec = viewInflated.et_time_recordEdit.text
             if(!fieldIsBlank(etTimeRec)) {
                 record.time = viewInflated.et_time_recordEdit.text.toString().toLong()
-                TODO("Obsłużyć maskę czasu")
+                //@TODO("Obsłużyć maskę czasu")
             }
             else
                 record.time = Long.MIN_VALUE
@@ -125,8 +129,7 @@ class RecordInputDialogFragment : DialogFragment() {
             val etDistanceRec = viewInflated.et_distance_recordEdit.text
             if(!fieldIsBlank(etDistanceRec)) {
                 var distance = viewInflated.et_distance_recordEdit.text.toString().toBigDecimal()
-                distance = distance.multiply(BigDecimal.valueOf(1000))
-                distance = distance.setScale(3, RoundingMode.HALF_EVEN)
+                distance = distance.setScale(3, RoundingMode.HALF_EVEN).movePointRight(3)
                 record.distance = distance.toLong()
             }
             else

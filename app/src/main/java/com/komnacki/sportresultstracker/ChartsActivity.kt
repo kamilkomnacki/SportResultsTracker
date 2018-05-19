@@ -1,5 +1,6 @@
 package com.komnacki.sportresultstracker
 
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
@@ -15,6 +16,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.komnacki.sportresultstracker.database.Record
 import com.komnacki.sportresultstracker.database.RecordConsts
 import com.komnacki.sportresultstracker.database.SportConsts
 
@@ -23,14 +25,7 @@ import kotlinx.android.synthetic.main.fragment_charts.view.*
 
 class ChartsActivity : AppCompatActivity() {
 
-    /**
-     * The [android.support.v4.view.PagerAdapter] that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * [android.support.v4.app.FragmentStatePagerAdapter].
-     */
+    private lateinit var recordsListViewModel: RecordsListViewModel
     private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
     private var sportId: Long = -1
 
@@ -49,9 +44,14 @@ class ChartsActivity : AppCompatActivity() {
         sportId = intent.getLongExtra(SportConsts.ID, -1);
         Toast.makeText(this, "SportID:" + sportId, Toast.LENGTH_SHORT).show()
 
-            fab.setOnClickListener {
+        recordsListViewModel = ViewModelProviders
+                .of(this, RecordsListFactory(this.application, sportId))
+                .get(RecordsListViewModel::class.java)
 
-                //view -> showRecordEditDialog(sportId)
+            fab.setOnClickListener { view ->
+                var record = Record()
+                record.sport_id = sportId
+                showRecordEditDialog(record)
         }
 
     }
@@ -82,10 +82,10 @@ class ChartsActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun showRecordEditDialog(sportId: Long){
-//        val RECORD_INPUT_DIALOG_TAG = RecordInputDialogFragment::class.java.name
-//        val recordInputDialogFragment = RecordInputDialogFragment.newInstance("Your record", sportId)
-//        recordInputDialogFragment.show(fragmentManager, RECORD_INPUT_DIALOG_TAG)
+    private fun showRecordEditDialog(record: Record){
+        val RECORD_INPUT_DIALOG_TAG = RecordInputDialogFragment::class.java.name
+        val recordInputDialogFragment = RecordInputDialogFragment.newInstance("Your record", record, recordsListViewModel)
+        recordInputDialogFragment.show(fragmentManager, RECORD_INPUT_DIALOG_TAG)
     }
 
 

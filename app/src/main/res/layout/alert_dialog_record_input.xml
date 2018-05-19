@@ -50,8 +50,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:maxLength="15"
             android:hint="Distance"
-            android:inputType="numberSigned" />
+            android:inputType="numberDecimal" />
 
         <EditText
             android:id="@+id/et_repeat_recordEdit"
