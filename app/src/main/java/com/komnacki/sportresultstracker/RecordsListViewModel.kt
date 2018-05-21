@@ -2,15 +2,18 @@ package com.komnacki.sportresultstracker
 
 import android.app.Application
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.util.Log
 import com.komnacki.sportresultstracker.database.Record
 import com.komnacki.sportresultstracker.database.RecordRepository
 import com.komnacki.sportresultstracker.database.Sport
 
-class RecordsListViewModel(application: Application, sportId: Long): ViewModel() {
+class RecordsListViewModel(application: Application, val sportId: Long): ViewModel() {
 
     private var recordRepository = RecordRepository()
-    private var listOfRecords = recordRepository.getAll(sportId)
+    private var listOfRecords: LiveData<List<Record>> = recordRepository.getAll(sportId)
+
 
     fun insert(record: Record) {
         recordRepository.insert(record)
@@ -29,7 +32,11 @@ class RecordsListViewModel(application: Application, sportId: Long): ViewModel()
     }
 
     fun getRecordList(): LiveData<List<Record>> {
+        if(listOfRecords.value == null){
+            Log.d("RecViewModel", "listOfRecords is null in getRecordList")
+            //listOfRecords = recordRepository.getAll(sportId)
+            Log.d("RecViewModel", "listOfRecords: " + listOfRecords.value)
+        }
         return listOfRecords
     }
-
 }

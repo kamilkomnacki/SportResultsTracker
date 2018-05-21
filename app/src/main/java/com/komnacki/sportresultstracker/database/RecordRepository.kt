@@ -34,7 +34,6 @@ class RecordRepository {
     }
 
     fun getAll(sportId: Long): LiveData<List<Record>> {
-        Log.d(LOG_TAG, "sport ID to get records: " + sportId)
         return recordDAO.getAll(sportId)
     }
 

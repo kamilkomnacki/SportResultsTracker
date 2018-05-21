@@ -58,9 +58,14 @@ class RecordsListAdapter(
         }
 
         fun setRecords(records: List<Record>?) {
-            list = records
+            list = records!!.sortedBy { it.date }
+
             notifyDataSetChanged()
             Log.d(LOG_TAG, "Notify data set changed.")
+        }
+
+        fun getRecords(): List<Record>? {
+            return list
         }
 
         fun<T: RecyclerView.ViewHolder> T.onClick(event: (view: View, type: Int, position: Int, id: Long?) -> Unit): T {

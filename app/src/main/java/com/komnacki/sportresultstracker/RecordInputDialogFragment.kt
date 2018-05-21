@@ -70,9 +70,7 @@ class RecordInputDialogFragment : DialogFragment() {
                 etTime.setText(record.time.toString())
 
             if(!record.distance!!.equals(Long.MIN_VALUE)) {
-//                var distanceDouble: Double = record.distance!!.div(1000.0)
-//                etDistance.setText(distanceDouble.toString())
-                var distanceBigDecimal: BigDecimal = record.distance!!
+                val distanceBigDecimal: BigDecimal = record.distance!!
                         .toBigDecimal()
                         .movePointLeft(3)
                 etDistance.setText(distanceBigDecimal.toPlainString())

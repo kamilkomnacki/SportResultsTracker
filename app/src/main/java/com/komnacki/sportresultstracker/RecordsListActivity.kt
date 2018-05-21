@@ -47,10 +47,15 @@ class RecordsListActivity : AppCompatActivity() {
             }
         })
 
+
+        var listOfRecords: List<Record>? = recordsListViewModel.getRecordList().value
+        Log.d("FRAGMENT--- size:", listOfRecords.toString())
         Log.d(LOG_TAG, "INTENT EXTRA = " + sportId)
 
         adapter.registerAdapterDataObserver(EmptyListObserver(recyclerView, emptyView))
 
+        listOfRecords = recordsListViewModel.getRecordList().value
+        Log.d("FRAGMENT--- size2:", listOfRecords.toString())
 
         fab.setOnClickListener {
             var record = Record()
@@ -64,9 +69,5 @@ class RecordsListActivity : AppCompatActivity() {
         val RECORD_INPUT_DIALOG_TAG = RecordInputDialogFragment::class.java.name
         val recordInputDialogFragment = RecordInputDialogFragment.newInstance("Your record", record, recordsListViewModel)
         recordInputDialogFragment.show(fragmentManager, RECORD_INPUT_DIALOG_TAG)
-//        if (record.id == null)
-//            recordsListViewModel.insert(record)
-//        else
-//            recordsListViewModel.update(record)
     }
 }
