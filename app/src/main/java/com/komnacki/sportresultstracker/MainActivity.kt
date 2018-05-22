@@ -10,27 +10,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        test.setText("Test from MainActivity")
 
-        buttonToSportsList.setOnClickListener(View.OnClickListener {
-            val intent = Intent(this, SportsListActivity::class.java)
-            startActivity(intent)
-        })
+        val intent = Intent(this, UsersListActivity::class.java)
+        startActivity(intent)
 
-        buttonToUsersList.setOnClickListener(View.OnClickListener {
-            val intent = Intent(this, UsersListActivity::class.java)
-            startActivity(intent)
-        })
-
-        buttonToSportEdit.setOnClickListener(View.OnClickListener {
-            val intent = Intent(this, SportEditActivity::class.java)
-            startActivity(intent)
-        })
-
-        buttonToRecordEdit.setOnClickListener(View.OnClickListener {
-            val intent = Intent(this, ChartsActivity::class.java)
-            startActivity(intent)
-        })
+        finish()
     }
 }

@@ -103,4 +103,8 @@ class UsersListActivity : AppCompatActivity() {
         }
         return false
     }
+
+    override fun onBackPressed() {
+        finish()
+    }
 }
