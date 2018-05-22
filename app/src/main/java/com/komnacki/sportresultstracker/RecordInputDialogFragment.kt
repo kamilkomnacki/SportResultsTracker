@@ -41,7 +41,7 @@ class RecordInputDialogFragment : DialogFragment() {
         fun newInstance(title: String, rec: Record, recListViewModel: RecordsListViewModel) : RecordInputDialogFragment{
             record = rec
             recordsListViewModel = recListViewModel
-            var fragment: RecordInputDialogFragment = RecordInputDialogFragment()
+            var fragment = RecordInputDialogFragment()
             val args = Bundle()
             args.putString(ARG_TITLE, title)
             fragment.arguments = args
@@ -88,6 +88,13 @@ class RecordInputDialogFragment : DialogFragment() {
 
                 val newDateMiliseconds = newDate.time + currentTime
                 date = java.util.Date(newDateMiliseconds)
+
+                Log.d(LOG_TAG, " data timeNow: $timeNow")
+                Log.d(LOG_TAG, " data offset:  $offset")
+                Log.d(LOG_TAG, " data curTime: $currentTime")
+                Log.d(LOG_TAG, " data newMili: $newDateMiliseconds")
+                Log.d(LOG_TAG, " data newDate: $newDate")
+                Log.d(LOG_TAG, " data date   : $date")
             }
         }
 

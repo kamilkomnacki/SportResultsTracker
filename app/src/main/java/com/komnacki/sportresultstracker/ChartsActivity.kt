@@ -1,6 +1,5 @@
 package com.komnacki.sportresultstracker
 
-import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -9,10 +8,13 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.*
 import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
@@ -23,6 +25,8 @@ import kotlinx.android.synthetic.main.activity_charts.*
 import kotlinx.android.synthetic.main.fragment_charts.view.*
 
 class ChartsActivity : AppCompatActivity() {
+
+    val LOG_TAG: String = ChartsActivity::class.java.toString()
 
     lateinit var recordsListViewModel: RecordsListViewModel
     private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
@@ -37,35 +41,44 @@ class ChartsActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
 
-        Log.d("CHARTSACTIVITY:", "onCreate")
+        Log.d(LOG_TAG, "onCreate")
 
         sportId = intent.getLongExtra(SportConsts.ID, -1);
 
         recordsListViewModel = ViewModelProviders
                 .of(this, RecordsListFactory(this.application, sportId))
                 .get(RecordsListViewModel::class.java)
-        recordsListViewModel.getRecordList().observe(this, object : Observer<List<Record>>{
+        recordsListViewModel.getRecordList().observe(this, object : Observer<List<Record>> {
             override fun onChanged(t: List<Record>?) {
-                Log.d("FRAGMENT size1:", t.toString())
+
+                var currentFragment = supportFragmentManager.findFragmentById(charts_container.id)
+                if (currentFragment == null) {
+                    listOfRecords = null
+                    mSectionsPagerAdapter = null
+                    charts_container.adapter = null
+                    Log.e(LOG_TAG + "on Create", "currentFragment is NULL!")
+                    ///                   mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
+                    //                    charts_container.adapter = mSectionsPagerAdapter
+                } else {
+                    listOfRecords = null
+                    mSectionsPagerAdapter = null
+                    charts_container.adapter = null
+                    val fragTransaction = supportFragmentManager.beginTransaction()
+                    fragTransaction.remove(currentFragment)
+                    //                    //fragTransaction.detach(currentFragment)
+                    //                    //fragTransaction.attach(currentFragment)
+                    fragTransaction.commitAllowingStateLoss()
+
+                    var somethingPopped = supportFragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                    Log.d(LOG_TAG, "Something popped: $somethingPopped")
+                }
+
+                Log.d(LOG_TAG + " on create size1:", t.toString())
                 listOfRecords = t
                 mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
-                container.adapter = mSectionsPagerAdapter
+                charts_container.adapter = mSectionsPagerAdapter
             }
         })
-
-
-
-        //listOfRecords = recordsListViewModel.getRecordList()
-
-        //Log.d("FRAGMENT ChartsActivity:", listOfRecords.toString())
-
-
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-
-
-        // Set up the ViewPager with the sections adapter.
-
 
 
         fab.setOnClickListener { view ->
@@ -75,36 +88,6 @@ class ChartsActivity : AppCompatActivity() {
         }
     }
 
-    //---------------------------------------------------
-    override fun onStart() {
-        recordsListViewModel.getRecordList().observe(this, object : Observer<List<Record>>{
-            override fun onChanged(t: List<Record>?) {
-                Log.d("FRAGMENT size1:", t.toString())
-                listOfRecords = t
-                mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
-                container.adapter = mSectionsPagerAdapter
-            }
-        })
-        Log.d("CHARTSACTIVITY:", "onStart")
-        super.onStart()
-    }
-
-    override fun onResume() {
-        Log.d("CHARTSACTIVITY:", "onResume")
-        super.onResume()
-    }
-
-    override fun onPause() {
-        Log.d("CHARTSACTIVITY:", "onPause")
-        super.onPause()
-    }
-
-    override fun onStop() {
-        recordsListViewModel.getRecordList().removeObservers(this)
-        super.onStop()
-    }
-
-    //---------------------------------------------------
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -140,7 +123,6 @@ class ChartsActivity : AppCompatActivity() {
     val mLifecycleRegistry = LifecycleRegistry(this)
     override fun getLifecycle(): LifecycleRegistry {
         return mLifecycleRegistry
-
     }
 
     /**
@@ -153,10 +135,10 @@ class ChartsActivity : AppCompatActivity() {
         override fun getItem(position: Int): Fragment {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-
-
-            if(listOfRecords == null){
-                Log.d("SectionPagerAdapter:", "listOfRecords is null")
+            if (listOfRecords == null) {
+                Log.d("SectionPagerAdapter///:", "listOfRecords is null")
+            } else {
+                Log.d("SectionPagerAdapter///:", listOfRecords.toString())
             }
             return PlaceholderFragment.newInstance(
                     position + 1,
@@ -174,6 +156,8 @@ class ChartsActivity : AppCompatActivity() {
 
     class PlaceholderFragment : Fragment() {
 
+        val LOG_TAG: String = PlaceholderFragment::class.java.toString()
+
         companion object {
 
             /**
@@ -183,6 +167,7 @@ class ChartsActivity : AppCompatActivity() {
             private val ARG_SECTION_NUMBER = "section_number"
             private val ARG_IS_RECORDS_NULL = "is_records_null"
             private lateinit var records: List<Record>
+            private lateinit var recordsListViewModel: RecordsListViewModel
 
             /**
              * Returns a new instance of this fragment for the given section
@@ -191,35 +176,40 @@ class ChartsActivity : AppCompatActivity() {
             fun newInstance(sectionNumber: Int, recFromDb: List<Record>?): PlaceholderFragment {
                 val fragment = PlaceholderFragment()
                 val args = Bundle()
-                if(recFromDb != null) {
+                if (recFromDb != null) {
                     args.putBoolean(ARG_IS_RECORDS_NULL, false)
                     records = recFromDb
-                }else
+                } else {
+                    Log.e("com.komnacki.sportresultstracker NEW INSTANCE", "rec fromDB is NULL")
                     args.putBoolean(ARG_IS_RECORDS_NULL, true)
-
-
+                }
                 args.putInt(ARG_SECTION_NUMBER, sectionNumber)
 
                 fragment.arguments = args
+
+
                 return fragment
             }
-
         }
+
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                                   savedInstanceState: Bundle?): View? {
             val rootView = inflater.inflate(R.layout.fragment_charts, container, false)
             val pageNumber = arguments.getInt(ARG_SECTION_NUMBER)
             var chart: LineChart = rootView.lineChartView
-            var lineData: LineData? = null
-            when(pageNumber){
-                1 -> {
-                    lineData=distanceToDateChart(arguments.getBoolean(ARG_IS_RECORDS_NULL))}
-            }
             chart.clear()
-            if(lineData == null) {
-                Log.d("F@@@:", records.toString())
-                chart.clear()
+            chart = setChartOptions(chart)
+            chart.setBackgroundColor(resources.getColor(R.color.colorPrimaryDark))
+            var lineData: LineData? = null
+
+
+            when (pageNumber) {
+                1 -> { lineData = distanceToDateChart(arguments.getBoolean(ARG_IS_RECORDS_NULL)) }
+                2 -> { lineData = timeToDateChart(arguments.getBoolean(ARG_IS_RECORDS_NULL)) }
             }
+
+            if (lineData == null)
+                chart.clear()
             else {
                 chart.data = lineData
                 chart.setTouchEnabled(true)
@@ -228,26 +218,81 @@ class ChartsActivity : AppCompatActivity() {
             return rootView
         }
 
+        private fun setChartOptions(chart: LineChart): LineChart {
+            val xAxisTextSize: Float = 15f
+            val yAxisTextSize: Float = 13f
+
+            //Colors
+            chart.setBackgroundColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
+            chart.setBorderColor(ContextCompat.getColor(context, R.color.colorPrimary))
+            chart.setNoDataTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
+            chart.setGridBackgroundColor(ContextCompat.getColor(context, R.color.colorGridGray))
+
+
+            //x
+            chart.xAxis.setAvoidFirstLastClipping(true)
+            chart.xAxis.textColor = ContextCompat.getColor(context, R.color.colorPrimary)
+            chart.xAxis.textSize = xAxisTextSize
+            chart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+
+            //y
+            chart.axisLeft.textColor = ContextCompat.getColor(context, R.color.colorPrimary)
+            chart.axisLeft.textSize = yAxisTextSize
+
+            chart.axisRight.isEnabled = false
+            return chart
+        }
+
         private fun distanceToDateChart(isRecordsNull: Boolean): LineData? {
             var entries = ArrayList<Entry>()
-            if(!isRecordsNull){
+            if (!isRecordsNull) {
                 records = records.sortedBy { it.date }
-                for (rec in records){
-                    if(!rec.distance!!.equals(Long.MIN_VALUE)) {
+                for (rec in records) {
+                    if (!rec.distance!!.equals(Long.MIN_VALUE)) {
                         val x: Float = rec.date!!.time.div(24 * 60 * 60 * 1000).toFloat()
                         val y: Float = rec.distance!!.toFloat()
-                        entries.add(Entry(x,y))
+                        Log.d(LOG_TAG, " entries try to add ($x), ($y)")
+                        entries.add(Entry(x, y))
                     }
                 }
             }
 
             var lineDataSet: LineDataSet
-            if(entries.isEmpty())
+            if (entries.isEmpty()) {
+                Log.e(LOG_TAG, " Chart entries are null!")
                 return null
-            else
+            } else {
                 lineDataSet = LineDataSet(entries, "Label")
+                lineDataSet.setColors(ContextCompat.getColor(context, R.color.colorPrimary))
+                lineDataSet.formLineWidth = 150f
+                return LineData(lineDataSet)
+            }
+        }
 
-            return LineData(lineDataSet)
+        private fun timeToDateChart(isRecordsNull: Boolean): LineData? {
+            var entries = ArrayList<Entry>()
+            if (!isRecordsNull) {
+                records = records.sortedBy { it.date }
+                for (rec in records) {
+                    if (!rec.time!!.equals(Long.MIN_VALUE)) {
+                        val x: Float = rec.date!!.time.div(24 * 60 * 60 * 1000).toFloat()
+                        val y: Float = rec.time!!.toFloat()
+                        Log.d(LOG_TAG, " entries try to add ($x), ($y)")
+                        entries.add(Entry(x, y))
+                    }
+                }
+            }
+
+            var lineDataSet: LineDataSet
+            if (entries.isEmpty()) {
+                Log.e(LOG_TAG, " Chart entries are null!")
+                return null
+            } else {
+                lineDataSet = LineDataSet(entries, "Label")
+                lineDataSet.setColors(ContextCompat.getColor(context, R.color.colorPrimary))
+                lineDataSet.formLineWidth = 150f
+                return LineData(lineDataSet)
+            }
         }
     }
 }
