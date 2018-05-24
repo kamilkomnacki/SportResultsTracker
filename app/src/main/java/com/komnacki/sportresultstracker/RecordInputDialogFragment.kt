@@ -3,29 +3,16 @@ package com.komnacki.sportresultstracker
 import android.app.AlertDialog
 import android.app.Dialog
 import android.app.DialogFragment
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
-import android.opengl.Visibility
 import android.os.Bundle
 import android.text.Editable
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
-import android.widget.CalendarView
-import android.widget.Toast
-import com.komnacki.sportresultstracker.database.*
-import com.redmadrobot.inputmask.MaskedTextChangedListener
+import com.komnacki.sportresultstracker.database.Record
 import kotlinx.android.synthetic.main.alert_dialog_record_input.*
 import kotlinx.android.synthetic.main.alert_dialog_record_input.view.*
-import kotlinx.android.synthetic.main.alert_dialog_sport_input.view.*
-import kotlinx.android.synthetic.main.item_records_list.view.*
 import java.math.BigDecimal
-import java.math.MathContext
 import java.math.RoundingMode
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 
 class RecordInputDialogFragment : DialogFragment() {
@@ -38,7 +25,7 @@ class RecordInputDialogFragment : DialogFragment() {
         private lateinit var record: Record
         private lateinit var recordsListViewModel: RecordsListViewModel
 
-        fun newInstance(title: String, rec: Record, recListViewModel: RecordsListViewModel) : RecordInputDialogFragment{
+        fun newInstance(title: String, rec: Record, recListViewModel: RecordsListViewModel): RecordInputDialogFragment {
             record = rec
             recordsListViewModel = recListViewModel
             var fragment = RecordInputDialogFragment()
@@ -63,13 +50,13 @@ class RecordInputDialogFragment : DialogFragment() {
         val etDistance = viewInflated.et_distance_recordEdit
         val calendar = viewInflated.calendarEdit
 
-        if(record.id != null){
+        if (record.id != null) {
             calendar.date = record.date!!.time
 
-            if(!record.time!!.equals(Long.MIN_VALUE))
+            if (!record.time!!.equals(Long.MIN_VALUE))
                 etTime.setText(record.time.toString())
 
-            if(!record.distance!!.equals(Long.MIN_VALUE)) {
+            if (!record.distance!!.equals(Long.MIN_VALUE)) {
                 val distanceBigDecimal: BigDecimal = record.distance!!
                         .toBigDecimal()
                         .movePointLeft(3)
@@ -80,22 +67,14 @@ class RecordInputDialogFragment : DialogFragment() {
         var date: java.util.Date = java.util.Date(calendar.date)
 
         calendar.setOnDateChangeListener { calendarView, year, month, day ->
-            val newDate = java.util.Date(year-1900,month,day)
-            if(!isEqualDates(date, newDate)) {
-                val timeNow = Calendar.getInstance()
-                val offset = timeNow.get(Calendar.ZONE_OFFSET) + timeNow.get(Calendar.DST_OFFSET)
-                val currentTime = (timeNow.timeInMillis + offset) % (24*60*60*1000)
+            val newDate = java.util.Date(year - 1900, month, day)
 
-                val newDateMiliseconds = newDate.time + currentTime
-                date = java.util.Date(newDateMiliseconds)
+            val timeNow = Calendar.getInstance()
+            val offset = timeNow.get(Calendar.ZONE_OFFSET) + timeNow.get(Calendar.DST_OFFSET)
+            val currentTime = (timeNow.timeInMillis + offset) % (24 * 60 * 60 * 1000)
 
-                Log.d(LOG_TAG, " data timeNow: $timeNow")
-                Log.d(LOG_TAG, " data offset:  $offset")
-                Log.d(LOG_TAG, " data curTime: $currentTime")
-                Log.d(LOG_TAG, " data newMili: $newDateMiliseconds")
-                Log.d(LOG_TAG, " data newDate: $newDate")
-                Log.d(LOG_TAG, " data date   : $date")
-            }
+            val newDateMiliseconds = newDate.time + currentTime
+            date = java.util.Date(newDateMiliseconds)
         }
 
 
@@ -124,20 +103,18 @@ class RecordInputDialogFragment : DialogFragment() {
             record.date = date
 
             val etTimeRec = viewInflated.et_time_recordEdit.text
-            if(!fieldIsBlank(etTimeRec)) {
+            if (!fieldIsBlank(etTimeRec)) {
                 record.time = viewInflated.et_time_recordEdit.text.toString().toLong()
                 //@TODO("Obsłużyć maskę czasu")
-            }
-            else
+            } else
                 record.time = Long.MIN_VALUE
 
             val etDistanceRec = viewInflated.et_distance_recordEdit.text
-            if(!fieldIsBlank(etDistanceRec)) {
+            if (!fieldIsBlank(etDistanceRec)) {
                 var distance = viewInflated.et_distance_recordEdit.text.toString().toBigDecimal()
                 distance = distance.setScale(3, RoundingMode.HALF_EVEN).movePointRight(3)
                 record.distance = distance.toLong()
-            }
-            else
+            } else
                 record.distance = Long.MIN_VALUE
 
             if (record.id == null)
@@ -151,14 +128,8 @@ class RecordInputDialogFragment : DialogFragment() {
     }
 
     private fun fieldIsBlank(text: Editable?): Boolean {
-        if(text.isNullOrBlank())
+        if (text.isNullOrBlank())
             return true
         return false
-    }
-
-    private fun isEqualDates(date: Date, newDate: Date): Boolean {
-        if((date.day != newDate.day) || (date.month != newDate.month) || (date.year != newDate.year))
-            return false
-        return true
     }
 }
