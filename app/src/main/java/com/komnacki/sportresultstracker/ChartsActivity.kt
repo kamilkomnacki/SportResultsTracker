@@ -14,7 +14,6 @@ import android.util.Log
 import android.view.*
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
@@ -131,6 +130,19 @@ class ChartsActivity : AppCompatActivity() {
      */
     inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
+        //odświeżanie środkowych stron (np position=1 nie działa przy powrocie z listy rekorów)
+        override fun destroyItem(container: ViewGroup?, position: Int, `object`: Any?) {
+            Log.d(LOG_TAG, "Destroy Item called for position: $position!")
+            super.destroyItem(container, position, `object`)
+        }
+
+        override fun instantiateItem(container: ViewGroup?, position: Int): Any {
+            Log.d(LOG_TAG, " instantiateItem work. Position: $position")
+            return super.instantiateItem(container, position)
+//            return PlaceholderFragment.newInstance(
+//                    position + 1,
+//                    listOfRecords)
+        }
 
         override fun getItem(position: Int): Fragment {
             // getItem is called to instantiate the fragment for the given page.
@@ -167,7 +179,6 @@ class ChartsActivity : AppCompatActivity() {
             private val ARG_SECTION_NUMBER = "section_number"
             private val ARG_IS_RECORDS_NULL = "is_records_null"
             private lateinit var records: List<Record>
-            private lateinit var recordsListViewModel: RecordsListViewModel
 
             /**
              * Returns a new instance of this fragment for the given section
@@ -187,7 +198,6 @@ class ChartsActivity : AppCompatActivity() {
 
                 fragment.arguments = args
 
-
                 return fragment
             }
         }
@@ -196,17 +206,23 @@ class ChartsActivity : AppCompatActivity() {
                                   savedInstanceState: Bundle?): View? {
             val rootView = inflater.inflate(R.layout.fragment_charts, container, false)
             val pageNumber = arguments.getInt(ARG_SECTION_NUMBER)
-            var chart: LineChart = rootView.lineChartView
-            chart.clear()
-            chart = setChartOptions(chart)
-            chart.setBackgroundColor(resources.getColor(R.color.colorPrimaryDark))
+
+
             var lineData: LineData? = null
-
-
             when (pageNumber) {
-                1 -> { lineData = distanceToDateChart(arguments.getBoolean(ARG_IS_RECORDS_NULL)) }
-                2 -> { lineData = timeToDateChart(arguments.getBoolean(ARG_IS_RECORDS_NULL)) }
+                1 -> {
+                    lineData = distanceToDateChart(arguments.getBoolean(ARG_IS_RECORDS_NULL))
+                }
+                2 -> {
+                    lineData = timeToDateChart(arguments.getBoolean(ARG_IS_RECORDS_NULL))
+                }
+                3 -> {
+                    lineData = averageSpeedToDateChart(arguments.getBoolean(ARG_IS_RECORDS_NULL))
+                }
             }
+
+            var chart: LineChart = rootView.lineChartView
+            chart = setChartOptions(chart)
 
             if (lineData == null)
                 chart.clear()
@@ -218,9 +234,89 @@ class ChartsActivity : AppCompatActivity() {
             return rootView
         }
 
+        private fun distanceToDateChart(isRecordsNull: Boolean): LineData? {
+            val LABEL_TITLE = "Distance to date chart"
+            var entries = ArrayList<Entry>()
+            if (!isRecordsNull) {
+                records = records.sortedBy { it.date }
+                for (rec in records) {
+                    if (!rec.distance!!.equals(Long.MIN_VALUE)) {
+                        val x: Float = rec.date!!.time.div(24 * 60 * 60 * 1000).toFloat()
+                        val y: Float = rec.distance!!.toFloat()
+                        Log.d(LOG_TAG, " [1] entries try to add ($x), ($y)")
+                        entries.add(Entry(x, y))
+                    }
+                }
+            }
+
+            var lineDataSet: LineDataSet
+            return if (entries.isEmpty()) {
+                Log.e(LOG_TAG, " Chart entries are null!")
+                null
+            } else {
+                lineDataSet = LineDataSet(entries, LABEL_TITLE)
+                lineDataSet = setLineDataSetOptions(lineDataSet)
+                LineData(lineDataSet)
+            }
+        }
+
+        private fun timeToDateChart(isRecordsNull: Boolean): LineData? {
+            val LABEL_TITLE = "Time to date chart"
+            var entries = ArrayList<Entry>()
+            if (!isRecordsNull) {
+                records = records.sortedBy { it.date }
+                for (rec in records) {
+                    if (!rec.time!!.equals(Long.MIN_VALUE)) {
+                        val x: Float = rec.date!!.time.div(24 * 60 * 60 * 1000).toFloat()
+                        val y: Float = rec.time!!.toFloat()
+                        Log.d(LOG_TAG, " [2] entries try to add ($x), ($y)")
+                        entries.add(Entry(x, y))
+                    }
+                }
+            }
+
+            var lineDataSet: LineDataSet
+            return if (entries.isEmpty()) {
+                Log.e(LOG_TAG, " Chart entries are null!")
+                null
+            } else {
+                lineDataSet = LineDataSet(entries, LABEL_TITLE)
+                lineDataSet = setLineDataSetOptions(lineDataSet)
+                LineData(lineDataSet)
+            }
+        }
+
+        private fun averageSpeedToDateChart(isRecordsNull: Boolean): LineData? {
+            val LABEL_TITLE = "Average speed to date"
+            var entries = ArrayList<Entry>()
+            if (!isRecordsNull) {
+                records = records.sortedBy { it.date }
+                for (rec in records) {
+                    if (!rec.distance!!.equals(Long.MIN_VALUE)) {
+                        val x: Float = rec.date!!.time.div(24 * 60 * 60 * 1000).toFloat()
+                        val y: Float = (rec.distance!!.toFloat() / rec.time!!.toFloat())
+                        Log.d(LOG_TAG, " [3] entries try to add ($x), ($y)")
+                        entries.add(Entry(x, y))
+                    }
+                }
+            }
+
+            var lineDataSet: LineDataSet
+            return if (entries.isEmpty()) {
+                Log.e(LOG_TAG, " Chart entries are null!")
+                null
+            } else {
+                lineDataSet = LineDataSet(entries, LABEL_TITLE)
+                lineDataSet = setLineDataSetOptions(lineDataSet)
+                LineData(lineDataSet)
+            }
+        }
+
         private fun setChartOptions(chart: LineChart): LineChart {
             val xAxisTextSize: Float = 15f
             val yAxisTextSize: Float = 13f
+
+            chart.clear()
 
             //Colors
             chart.setBackgroundColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
@@ -238,61 +334,15 @@ class ChartsActivity : AppCompatActivity() {
             //y
             chart.axisLeft.textColor = ContextCompat.getColor(context, R.color.colorPrimary)
             chart.axisLeft.textSize = yAxisTextSize
-
             chart.axisRight.isEnabled = false
+
             return chart
         }
 
-        private fun distanceToDateChart(isRecordsNull: Boolean): LineData? {
-            var entries = ArrayList<Entry>()
-            if (!isRecordsNull) {
-                records = records.sortedBy { it.date }
-                for (rec in records) {
-                    if (!rec.distance!!.equals(Long.MIN_VALUE)) {
-                        val x: Float = rec.date!!.time.div(24 * 60 * 60 * 1000).toFloat()
-                        val y: Float = rec.distance!!.toFloat()
-                        Log.d(LOG_TAG, " entries try to add ($x), ($y)")
-                        entries.add(Entry(x, y))
-                    }
-                }
-            }
-
-            var lineDataSet: LineDataSet
-            if (entries.isEmpty()) {
-                Log.e(LOG_TAG, " Chart entries are null!")
-                return null
-            } else {
-                lineDataSet = LineDataSet(entries, "Label")
-                lineDataSet.setColors(ContextCompat.getColor(context, R.color.colorPrimary))
-                lineDataSet.formLineWidth = 150f
-                return LineData(lineDataSet)
-            }
-        }
-
-        private fun timeToDateChart(isRecordsNull: Boolean): LineData? {
-            var entries = ArrayList<Entry>()
-            if (!isRecordsNull) {
-                records = records.sortedBy { it.date }
-                for (rec in records) {
-                    if (!rec.time!!.equals(Long.MIN_VALUE)) {
-                        val x: Float = rec.date!!.time.div(24 * 60 * 60 * 1000).toFloat()
-                        val y: Float = rec.time!!.toFloat()
-                        Log.d(LOG_TAG, " entries try to add ($x), ($y)")
-                        entries.add(Entry(x, y))
-                    }
-                }
-            }
-
-            var lineDataSet: LineDataSet
-            if (entries.isEmpty()) {
-                Log.e(LOG_TAG, " Chart entries are null!")
-                return null
-            } else {
-                lineDataSet = LineDataSet(entries, "Label")
-                lineDataSet.setColors(ContextCompat.getColor(context, R.color.colorPrimary))
-                lineDataSet.formLineWidth = 150f
-                return LineData(lineDataSet)
-            }
+        private fun setLineDataSetOptions(lineDataSet: LineDataSet): LineDataSet {
+            lineDataSet.setColors(ContextCompat.getColor(context, R.color.colorPrimary))
+            lineDataSet.formLineWidth = 150f
+            return lineDataSet
         }
     }
 }
