@@ -11,7 +11,9 @@ import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -20,6 +22,7 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.komnacki.sportresultstracker.database.Record
 import com.komnacki.sportresultstracker.database.RecordConsts
 import com.komnacki.sportresultstracker.database.SportConsts
+import com.komnacki.sportresultstracker.formatters.DayAxisValueFormatter
 import kotlinx.android.synthetic.main.activity_charts.*
 import kotlinx.android.synthetic.main.fragment_charts.view.*
 
@@ -38,7 +41,6 @@ class ChartsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_charts)
 
-        setSupportActionBar(toolbar)
 
         Log.d(LOG_TAG, "onCreate")
 
@@ -80,6 +82,13 @@ class ChartsActivity : AppCompatActivity() {
         })
 
 
+        fab_toRecordsList.setOnClickListener { view ->
+            intent = Intent(this, RecordsListActivity::class.java)
+            intent.putExtra(RecordConsts.SPORT_ID, sportId)
+            startActivity(intent)
+        }
+
+
         fab.setOnClickListener { view ->
             var record = Record()
             record.sport_id = sportId
@@ -87,31 +96,6 @@ class ChartsActivity : AppCompatActivity() {
         }
     }
 
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_charts, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        val id = item.itemId
-
-        when (id) {
-            R.id.action_listOfRecords -> {
-                intent = Intent(this, RecordsListActivity::class.java)
-                intent.putExtra(RecordConsts.SPORT_ID, sportId)
-                startActivity(intent)
-            }
-            R.id.action_settings -> return true
-        }
-
-
-        return super.onOptionsItemSelected(item)
-    }
 
     private fun showRecordEditDialog(record: Record) {
         val RECORD_INPUT_DIALOG_TAG = RecordInputDialogFragment::class.java.name
@@ -208,20 +192,23 @@ class ChartsActivity : AppCompatActivity() {
             val pageNumber = arguments.getInt(ARG_SECTION_NUMBER)
 
 
+            var chart: LineChart = rootView.lineChartView
             var lineData: LineData? = null
             when (pageNumber) {
                 1 -> {
                     lineData = distanceToDateChart(arguments.getBoolean(ARG_IS_RECORDS_NULL))
+                    chart = formatDistanceToDateChart(chart)
                 }
                 2 -> {
                     lineData = timeToDateChart(arguments.getBoolean(ARG_IS_RECORDS_NULL))
+                    chart = formatTimeToDateChart(chart)
                 }
                 3 -> {
                     lineData = averageSpeedToDateChart(arguments.getBoolean(ARG_IS_RECORDS_NULL))
+                    chart = formatAverageSpeedToDateChart(chart)
                 }
             }
 
-            var chart: LineChart = rootView.lineChartView
             chart = setChartOptions(chart)
 
             if (lineData == null)
@@ -232,6 +219,27 @@ class ChartsActivity : AppCompatActivity() {
                 chart.invalidate()
             }
             return rootView
+        }
+
+        private fun formatAverageSpeedToDateChart(chart: LineChart): LineChart {
+            chart.axisLeft.setLabelCount(4, true)
+            chart.xAxis.valueFormatter = DayAxisValueFormatter(chart)
+            chart.xAxis.setLabelCount(4, true)
+            return chart
+        }
+
+        private fun formatTimeToDateChart(chart: LineChart): LineChart {
+            chart.axisLeft.setLabelCount(4, true)
+            chart.xAxis.valueFormatter = DayAxisValueFormatter(chart)
+            chart.xAxis.setLabelCount(4, true)
+            return chart
+        }
+
+        private fun formatDistanceToDateChart(chart: LineChart): LineChart {
+            chart.axisLeft.setLabelCount(4, true)
+            chart.xAxis.valueFormatter = DayAxisValueFormatter(chart)
+            chart.xAxis.setLabelCount(4, true)
+            return chart
         }
 
         private fun distanceToDateChart(isRecordsNull: Boolean): LineData? {
@@ -335,6 +343,8 @@ class ChartsActivity : AppCompatActivity() {
             chart.axisLeft.textColor = ContextCompat.getColor(context, R.color.colorPrimary)
             chart.axisLeft.textSize = yAxisTextSize
             chart.axisRight.isEnabled = false
+
+            chart.xAxis.granularity = 1f
 
             return chart
         }
