@@ -24,6 +24,7 @@ import com.komnacki.sportresultstracker.database.Record
 import com.komnacki.sportresultstracker.database.RecordConsts
 import com.komnacki.sportresultstracker.database.SportConsts
 import com.komnacki.sportresultstracker.formatters.DayAxisValueFormatter
+import com.komnacki.sportresultstracker.formatters.DistanceAxisValueFormatter
 import kotlinx.android.synthetic.main.activity_charts.*
 import kotlinx.android.synthetic.main.fragment_charts.view.*
 
@@ -198,32 +199,48 @@ class ChartsActivity : AppCompatActivity() {
             when (pageNumber) {
                 1 -> {
                     lineData = distanceToDateChart(arguments.getBoolean(ARG_IS_RECORDS_NULL))
-                    chart = formatDistanceToDateChart(chart)
                 }
                 2 -> {
                     lineData = timeToDateChart(arguments.getBoolean(ARG_IS_RECORDS_NULL))
-                    chart = formatTimeToDateChart(chart)
                 }
                 3 -> {
                     lineData = averageSpeedToDateChart(arguments.getBoolean(ARG_IS_RECORDS_NULL))
-                    chart = formatAverageSpeedToDateChart(chart)
                 }
             }
-
-            chart = setChartOptions(chart)
 
             if (lineData == null)
                 chart.clear()
             else {
+                chart = setChartOptions(chart)
                 chart.data = lineData
-                chart.setTouchEnabled(true)
+                when(pageNumber){
+                    1 -> {chart = formatDistanceToDateChart(chart)}
+                    2 -> {chart = formatTimeToDateChart(chart)}
+                    3 -> {chart = formatAverageSpeedToDateChart(chart)}
+                }
+
                 chart.invalidate()
             }
             return rootView
         }
 
+        private fun formatDistanceToDateChart(chart: LineChart): LineChart {
+            chart.axisLeft.valueFormatter = DistanceAxisValueFormatter()
+            chart.axisLeft.setLabelCount(5, true)
+            chart.axisLeft.axisMinimum = chart.lineData.yMin
+            chart.axisLeft.axisMaximum = chart.lineData.yMax
+
+
+            chart.xAxis.valueFormatter = DayAxisValueFormatter(chart)
+            chart.xAxis.setLabelCount(4, true)
+            return chart
+        }
+
         private fun formatAverageSpeedToDateChart(chart: LineChart): LineChart {
             chart.axisLeft.setLabelCount(5, true)
+            chart.axisLeft.axisMinimum = chart.lineData.yMin
+            chart.axisLeft.axisMaximum = chart.lineData.yMax
+
             chart.xAxis.valueFormatter = DayAxisValueFormatter(chart)
             chart.xAxis.setLabelCount(4, true)
             return chart
@@ -231,13 +248,9 @@ class ChartsActivity : AppCompatActivity() {
 
         private fun formatTimeToDateChart(chart: LineChart): LineChart {
             chart.axisLeft.setLabelCount(5, true)
-            chart.xAxis.valueFormatter = DayAxisValueFormatter(chart)
-            chart.xAxis.setLabelCount(4, true)
-            return chart
-        }
+            chart.axisLeft.axisMinimum = chart.lineData.yMin
+            chart.axisLeft.axisMaximum = chart.lineData.yMax
 
-        private fun formatDistanceToDateChart(chart: LineChart): LineChart {
-            chart.axisLeft.setLabelCount(5, true)
             chart.xAxis.valueFormatter = DayAxisValueFormatter(chart)
             chart.xAxis.setLabelCount(4, true)
             return chart
@@ -324,6 +337,7 @@ class ChartsActivity : AppCompatActivity() {
         private fun setChartOptions(chart: LineChart): LineChart {
             val LEGEND_TEXT_SIZE: Float = 20f
             val EXTRA_BOTTOM_OFFSET: Float = 15f
+            val EXTRA_RIGHT_OFFSET: Float = 15f
             val X_AXIS_TEXT_SIZE: Float = 15f
             val Y_AXIS_TEXT_SIZE: Float = 13f
             val GRANULATIRY: Float = 1f
@@ -337,6 +351,7 @@ class ChartsActivity : AppCompatActivity() {
             chart.setNoDataTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
             chart.setGridBackgroundColor(ContextCompat.getColor(context, R.color.colorGridGray))
             chart.extraBottomOffset = EXTRA_BOTTOM_OFFSET
+            chart.extraRightOffset = EXTRA_RIGHT_OFFSET
 
             //legend
             chart.legend.textColor = ContextCompat.getColor(context, R.color.colorPrimary)
@@ -356,6 +371,7 @@ class ChartsActivity : AppCompatActivity() {
             chart.axisLeft.textSize = Y_AXIS_TEXT_SIZE
             chart.axisRight.isEnabled = false
 
+            chart.setTouchEnabled(true)
 
             return chart
         }
