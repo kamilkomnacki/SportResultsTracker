@@ -15,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
@@ -222,28 +223,28 @@ class ChartsActivity : AppCompatActivity() {
         }
 
         private fun formatAverageSpeedToDateChart(chart: LineChart): LineChart {
-            chart.axisLeft.setLabelCount(4, true)
+            chart.axisLeft.setLabelCount(5, true)
             chart.xAxis.valueFormatter = DayAxisValueFormatter(chart)
             chart.xAxis.setLabelCount(4, true)
             return chart
         }
 
         private fun formatTimeToDateChart(chart: LineChart): LineChart {
-            chart.axisLeft.setLabelCount(4, true)
+            chart.axisLeft.setLabelCount(5, true)
             chart.xAxis.valueFormatter = DayAxisValueFormatter(chart)
             chart.xAxis.setLabelCount(4, true)
             return chart
         }
 
         private fun formatDistanceToDateChart(chart: LineChart): LineChart {
-            chart.axisLeft.setLabelCount(4, true)
+            chart.axisLeft.setLabelCount(5, true)
             chart.xAxis.valueFormatter = DayAxisValueFormatter(chart)
             chart.xAxis.setLabelCount(4, true)
             return chart
         }
 
         private fun distanceToDateChart(isRecordsNull: Boolean): LineData? {
-            val LABEL_TITLE = "Distance to date chart"
+            val LABEL_TITLE = "Distance to date"
             var entries = ArrayList<Entry>()
             if (!isRecordsNull) {
                 records = records.sortedBy { it.date }
@@ -269,7 +270,7 @@ class ChartsActivity : AppCompatActivity() {
         }
 
         private fun timeToDateChart(isRecordsNull: Boolean): LineData? {
-            val LABEL_TITLE = "Time to date chart"
+            val LABEL_TITLE = "Time to date"
             var entries = ArrayList<Entry>()
             if (!isRecordsNull) {
                 records = records.sortedBy { it.date }
@@ -321,8 +322,12 @@ class ChartsActivity : AppCompatActivity() {
         }
 
         private fun setChartOptions(chart: LineChart): LineChart {
-            val xAxisTextSize: Float = 15f
-            val yAxisTextSize: Float = 13f
+            val LEGEND_TEXT_SIZE: Float = 20f
+            val EXTRA_BOTTOM_OFFSET: Float = 15f
+            val X_AXIS_TEXT_SIZE: Float = 15f
+            val Y_AXIS_TEXT_SIZE: Float = 13f
+            val GRANULATIRY: Float = 1f
+
 
             chart.clear()
 
@@ -331,27 +336,36 @@ class ChartsActivity : AppCompatActivity() {
             chart.setBorderColor(ContextCompat.getColor(context, R.color.colorPrimary))
             chart.setNoDataTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
             chart.setGridBackgroundColor(ContextCompat.getColor(context, R.color.colorGridGray))
+            chart.extraBottomOffset = EXTRA_BOTTOM_OFFSET
 
+            //legend
+            chart.legend.textColor = ContextCompat.getColor(context, R.color.colorPrimary)
+            chart.legend.textSize = LEGEND_TEXT_SIZE
+            chart.legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
+            chart.legend.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
 
             //x
             chart.xAxis.setAvoidFirstLastClipping(true)
             chart.xAxis.textColor = ContextCompat.getColor(context, R.color.colorPrimary)
-            chart.xAxis.textSize = xAxisTextSize
+            chart.xAxis.textSize = X_AXIS_TEXT_SIZE
             chart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+            chart.xAxis.granularity = GRANULATIRY
 
             //y
             chart.axisLeft.textColor = ContextCompat.getColor(context, R.color.colorPrimary)
-            chart.axisLeft.textSize = yAxisTextSize
+            chart.axisLeft.textSize = Y_AXIS_TEXT_SIZE
             chart.axisRight.isEnabled = false
 
-            chart.xAxis.granularity = 1f
 
             return chart
         }
 
         private fun setLineDataSetOptions(lineDataSet: LineDataSet): LineDataSet {
+            val FORM_LINE_WIDTH: Float = 150f
+
             lineDataSet.setColors(ContextCompat.getColor(context, R.color.colorPrimary))
-            lineDataSet.formLineWidth = 150f
+            lineDataSet.setDrawValues(false)
+            lineDataSet.formLineWidth = FORM_LINE_WIDTH
             return lineDataSet
         }
     }
