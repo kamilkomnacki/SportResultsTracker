@@ -1,28 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:id="@+id/fl_alert_dialog_record_edit"-->
-    <!--android:padding="8dp">-->
-
-    <!--<android.support.design.widget.-->
-    <!--<FrameLayout-->
-        <!--android:id="@+id/fl_calendarView_recordEdit"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content">-->
-
-        <!--<CalendarView-->
-            <!--android:id="@+id/calendarView"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_column="1"-->
-            <!--android:layout_row="0" />-->
-    <!--</FrameLayout>-->
-
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:mask="http://schemas.android.com/apk/res-auto"
     android:id="@+id/sv_alert_dialog_record_edit"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -37,13 +18,17 @@
             android:layout_height="wrap_content" />
 
 
-        <EditText
+        <br.com.sapereaude.maskedEditText.MaskedEditText
             android:id="@+id/et_time_recordEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Time format: hh:mm:ss:msc"
-            android:inputType="time"/>
+            android:inputType="number"
+            android:imeOptions="actionDone"
+            android:typeface="monospace"
+            mask:allowed_chars="1234567890"
+            mask:mask="##:##:##:###"
+            android:hint="hhmmssccc"
+            app:keep_hint="true" />
 
         <EditText
             android:id="@+id/et_distance_recordEdit"
@@ -51,27 +36,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:maxLength="15"
-            android:hint="Distance"
-            android:inputType="numberDecimal" />
-
-        <EditText
-            android:id="@+id/et_repeat_recordEdit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:layout_weight="1"
-            android:hint="Number of repetitions"
-            android:visibility="gone"
-            android:inputType="numberDecimal" />
-
-        <EditText
-            android:id="@+id/et_weight_recordEdit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:layout_weight="1"
-            android:hint="Weight"
-            android:visibility="gone"
+            android:hint="@string/et_distance_hint"
             android:inputType="numberDecimal" />
     </LinearLayout>
 </ScrollView>
