@@ -1,4 +1,4 @@
-package com.komnacki.sportresultstracker
+package com.komnacki.sportresultstracker.charts
 
 import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.Observer
@@ -20,11 +20,17 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.komnacki.sportresultstracker.R
 import com.komnacki.sportresultstracker.database.Record
 import com.komnacki.sportresultstracker.database.RecordConsts
 import com.komnacki.sportresultstracker.database.SportConsts
 import com.komnacki.sportresultstracker.formatters.DayAxisValueFormatter
 import com.komnacki.sportresultstracker.formatters.DistanceAxisValueFormatter
+import com.komnacki.sportresultstracker.formatters.TimeAxisValueFormatter
+import com.komnacki.sportresultstracker.recordsActivity.RecordInputDialogFragment
+import com.komnacki.sportresultstracker.recordsActivity.RecordsListActivity
+import com.komnacki.sportresultstracker.recordsActivity.RecordsListFactory
+import com.komnacki.sportresultstracker.recordsActivity.RecordsListViewModel
 import kotlinx.android.synthetic.main.activity_charts.*
 import kotlinx.android.synthetic.main.fragment_charts.view.*
 
@@ -247,7 +253,8 @@ class ChartsActivity : AppCompatActivity() {
         }
 
         private fun formatTimeToDateChart(chart: LineChart): LineChart {
-            chart.axisLeft.setLabelCount(5, true)
+            chart.axisLeft.valueFormatter = TimeAxisValueFormatter()
+            chart.axisLeft.setLabelCount(2, true)
             chart.axisLeft.axisMinimum = chart.lineData.yMin
             chart.axisLeft.axisMaximum = chart.lineData.yMax
 

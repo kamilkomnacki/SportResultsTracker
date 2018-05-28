@@ -1,13 +1,11 @@
-package com.komnacki.sportresultstracker
+package com.komnacki.sportresultstracker.recordsActivity
 
 import android.app.Application
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.util.Log
 import com.komnacki.sportresultstracker.database.Record
 import com.komnacki.sportresultstracker.database.RecordRepository
-import com.komnacki.sportresultstracker.database.Sport
 
 class RecordsListViewModel(application: Application, val sportId: Long): ViewModel() {
 

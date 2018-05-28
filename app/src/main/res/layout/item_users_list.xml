@@ -20,9 +20,9 @@
         android:id="@+id/item_usersList_btn_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
+        android:background="@color/colorPrimaryDark"
         android:contentDescription="@string/contentDesc_deleteUser"
-        android:padding="@dimen/item_userList_padding"
         android:gravity="end"
+        android:padding="@dimen/item_userList_padding"
         android:src="@android:drawable/ic_menu_delete" />
 </LinearLayout>

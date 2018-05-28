@@ -4,6 +4,7 @@
     android:id="@+id/item_recordsList"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="2dp"
     android:orientation="horizontal"
     android:padding="@dimen/item_recordList_padding">
 
@@ -20,25 +21,27 @@
         android:id="@+id/item_recordList_tv_time"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:textColor="@color/colorPrimary"
-        tools:text="Time"/>
+        tools:text="Time" />
 
     <TextView
         android:id="@+id/item_recordList_tv_distance"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:textColor="@color/colorPrimary"
-        tools:text="Distance"/>
+        tools:text="Distance" />
 
     <ImageButton
         android:id="@+id/item_recordList_btn_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
+        android:background="@color/colorPrimaryDark"
         android:contentDescription="@string/contentDesc_deleteUser"
-        android:padding="@dimen/item_recordList_padding"
         android:gravity="end"
+        android:padding="@dimen/item_recordList_padding"
         android:src="@android:drawable/ic_menu_delete" />
 </LinearLayout>

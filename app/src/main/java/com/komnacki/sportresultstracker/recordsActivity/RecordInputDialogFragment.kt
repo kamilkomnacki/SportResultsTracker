@@ -1,4 +1,4 @@
-package com.komnacki.sportresultstracker
+package com.komnacki.sportresultstracker.recordsActivity
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -6,6 +6,7 @@ import android.app.DialogFragment
 import android.os.Bundle
 import android.text.Editable
 import android.view.LayoutInflater
+import com.komnacki.sportresultstracker.R
 import com.komnacki.sportresultstracker.database.Record
 import kotlinx.android.synthetic.main.alert_dialog_record_input.*
 import kotlinx.android.synthetic.main.alert_dialog_record_input.view.*

@@ -1,4 +1,4 @@
-package com.komnacki.sportresultstracker
+package com.komnacki.sportresultstracker.sportsActivity
 
 
 import android.arch.lifecycle.Observer
@@ -13,6 +13,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.Toast
+import com.komnacki.sportresultstracker.EmptyListObserver
+import com.komnacki.sportresultstracker.R
+import com.komnacki.sportresultstracker.charts.ChartsActivity
 import com.komnacki.sportresultstracker.database.Sport
 import com.komnacki.sportresultstracker.database.SportConsts
 import kotlinx.android.synthetic.main.activity_sports_list.*
@@ -82,8 +85,6 @@ class SportsListActivity : AppCompatActivity() {
             viewInflated.tv_input_sport.setText(sport.name)
             viewInflated.cb_hasTime.isChecked = sport.hasTime!!
             viewInflated.cb_hasDistance.isChecked = sport.hasDistance!!
-            viewInflated.cb_hasRepeat.isChecked = sport.hasRepeat!!
-            viewInflated.cb_hasWeight.isChecked = sport.hasWeight!!
         }
 
         alert.setPositiveButton(android.R.string.yes) { dialog, position ->
@@ -94,8 +95,6 @@ class SportsListActivity : AppCompatActivity() {
                 sport.user_id = userId
                 sport.hasTime = viewInflated.cb_hasTime.isChecked
                 sport.hasDistance = viewInflated.cb_hasDistance.isChecked
-                sport.hasRepeat = viewInflated.cb_hasRepeat.isChecked
-                sport.hasWeight = viewInflated.cb_hasWeight.isChecked
 
                 if (sport.id == null)
                     sportsListViewModel.insert(sport)
@@ -109,7 +108,7 @@ class SportsListActivity : AppCompatActivity() {
 
     private fun isNameExist(name: String): Boolean{
         if(sportsListViewModel.isNameExist(name)) {
-            Toast.makeText(this, "This name of sport is already exist!", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "This name of sport already exist!", Toast.LENGTH_LONG).show()
             return true
         }
         return false

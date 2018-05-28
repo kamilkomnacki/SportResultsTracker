@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fl_alert_dialog_sport_input"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/fl_alert_dialog_sport_input"
     android:padding="8dp">
 
     <android.support.design.widget.TextInputLayout
@@ -16,44 +16,22 @@
             android:hint="@string/hint_name"
             android:imeOptions="actionDone"
             android:inputType="textPersonName" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="Choose which data do you need in this sport activity? "/>
 
         <CheckBox
             android:id="@+id/cb_hasTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:visibility="gone"
-            android:text="Time" />
+            android:text="Time"
+            android:visibility="gone" />
 
         <CheckBox
             android:id="@+id/cb_hasDistance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:visibility="gone"
-            android:text="Distance" />
-
-        <CheckBox
-            android:id="@+id/cb_hasRepeat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:visibility="gone"
-            android:text="Repeat" />
-
-        <CheckBox
-            android:id="@+id/cb_hasWeight"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:visibility="gone"
-            android:text="Weight" />
-
+            android:text="Distance"
+            android:visibility="gone" />
 
 
     </android.support.design.widget.TextInputLayout>

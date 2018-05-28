@@ -1,4 +1,4 @@
-package com.komnacki.sportresultstracker
+package com.komnacki.sportresultstracker.recordsActivity
 
 import android.app.Application
 import android.arch.lifecycle.ViewModel

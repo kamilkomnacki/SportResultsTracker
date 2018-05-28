@@ -1,4 +1,4 @@
-package com.komnacki.sportresultstracker
+package com.komnacki.sportresultstracker.usersActivity
 
 
 import android.arch.lifecycle.Observer
@@ -13,8 +13,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.Toast
+import com.komnacki.sportresultstracker.EmptyListObserver
+import com.komnacki.sportresultstracker.R
 import com.komnacki.sportresultstracker.database.SportConsts
 import com.komnacki.sportresultstracker.database.User
+import com.komnacki.sportresultstracker.sportsActivity.SportsListActivity
 import kotlinx.android.synthetic.main.activity_users_list.*
 import kotlinx.android.synthetic.main.alert_dialog_user_input.*
 import kotlinx.android.synthetic.main.alert_dialog_user_input.view.*
@@ -102,9 +105,5 @@ class UsersListActivity : AppCompatActivity() {
             return true
         }
         return false
-    }
-
-    override fun onBackPressed() {
-        finish()
     }
 }
