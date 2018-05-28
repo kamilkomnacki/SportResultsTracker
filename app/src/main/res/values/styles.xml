@@ -18,8 +18,8 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="ToolbarTheme">
-        <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:background">@color/colorAccent</item>
+        <item name="android:titleTextColor">@color/colorPrimary</item>
     </style>
     <!-- FONT STYLES    -->
     <style name="font_emptyView">
