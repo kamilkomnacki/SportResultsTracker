@@ -48,7 +48,7 @@ class SportsListActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
         sportsListViewModel = ViewModelProviders
-                .of(this, SportsListFactory(this.application, userId))
+                .of(this, SportsListFactory(userId))
                 .get(SportsListViewModel::class.java)
         sportsListViewModel.getSportsList().observe(this, object : Observer<List<Sport>> {
             override fun onChanged(t: List<Sport>?) {

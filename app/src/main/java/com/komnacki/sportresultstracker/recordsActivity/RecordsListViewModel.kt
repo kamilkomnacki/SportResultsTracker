@@ -12,7 +12,6 @@ class RecordsListViewModel(application: Application, val sportId: Long): ViewMod
     private var recordRepository = RecordRepository()
     private var listOfRecords: LiveData<List<Record>> = recordRepository.getAll(sportId)
 
-
     fun insert(record: Record) {
         recordRepository.insert(record)
     }
@@ -30,11 +29,8 @@ class RecordsListViewModel(application: Application, val sportId: Long): ViewMod
     }
 
     fun getRecordList(): LiveData<List<Record>> {
-        if(listOfRecords.value == null){
-            Log.d("RecViewModel", "listOfRecords is null in getRecordList")
-            //listOfRecords = recordRepository.getAll(sportId)
+        if (listOfRecords.value == null)
             Log.d("RecViewModel", "listOfRecords: " + listOfRecords.value)
-        }
         return listOfRecords
     }
 }

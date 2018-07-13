@@ -1,7 +1,6 @@
 package com.komnacki.sportresultstracker.formatters
 
 
-import android.util.Log
 import com.github.mikephil.charting.charts.BarLineChartBase
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
@@ -10,7 +9,7 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter
 class DayAxisValueFormatter(private val chart: BarLineChartBase<*>) : IAxisValueFormatter {
 
     val LOG_TAG = DayAxisValueFormatter::class.java.name
-    protected var mMonths = arrayOf("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+    private var mMonths = arrayOf("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
 
     override fun getFormattedValue(value: Float, axis: AxisBase): String {
 
@@ -40,14 +39,11 @@ class DayAxisValueFormatter(private val chart: BarLineChartBase<*>) : IAxisValue
                 23 -> appendix = "rd"
                 31 -> appendix = "st"
             }
-            Log.d(LOG_TAG, " input value: $value, year: $year, month: $month,  day: $dayOfMonth")
             return if (dayOfMonth == 0) "" else dayOfMonth.toString() + appendix + " " + monthName
         }
     }
 
     private fun getDaysForMonth(month: Int, year: Int): Int {
-
-        // month is 0-based
 
         if (month == 1) {
             var is29Feb = false

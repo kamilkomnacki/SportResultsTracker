@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
 import android.widget.RelativeLayout
-import android.widget.Toast
 import com.komnacki.sportresultstracker.EmptyListObserver
 import com.komnacki.sportresultstracker.R
 import com.komnacki.sportresultstracker.database.Record
@@ -31,10 +30,8 @@ class RecordsListActivity : AppCompatActivity() {
         val emptyView: RelativeLayout = findViewById(R.id.empty_recordList)
         val itemOnClick: (View, Int, Int, Long?) -> Unit = { recyclerView, type, position, recordId ->
             showRecordEditDialog(recordsListViewModel.getRecord(recordId))
-//            val intent = Intent(this, ChartsActivity::class.java)
-//            intent.putExtra(RecordConsts.SPORT_ID, recordId)
-//            startActivity(intent)
         }
+
         val adapter = RecordsListAdapter(this, itemOnClick)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -42,6 +39,7 @@ class RecordsListActivity : AppCompatActivity() {
         recordsListViewModel = ViewModelProviders
                 .of(this, RecordsListFactory(this.application, sportId))
                 .get(RecordsListViewModel::class.java)
+
         recordsListViewModel.getRecordList().observe(this, object : Observer<List<Record>>{
             override fun onChanged(t: List<Record>?) {
                 adapter.setRecords(t)
@@ -51,7 +49,6 @@ class RecordsListActivity : AppCompatActivity() {
 
         var listOfRecords: List<Record>? = recordsListViewModel.getRecordList().value
         Log.d("FRAGMENT--- size:", listOfRecords.toString())
-        Log.d(LOG_TAG, "INTENT EXTRA = " + sportId)
 
         adapter.registerAdapterDataObserver(EmptyListObserver(recyclerView, emptyView))
 
@@ -62,7 +59,6 @@ class RecordsListActivity : AppCompatActivity() {
             var record = Record()
             record.sport_id = sportId
             showRecordEditDialog(record)
-            Toast.makeText(this, "SportID:"+sportId, Toast.LENGTH_SHORT).show()
         }
 
     }

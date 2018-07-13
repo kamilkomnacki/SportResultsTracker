@@ -12,7 +12,6 @@
     <string name="hint_name">Name</string>
     <string name="title_activity_charts">ChartsActivity</string>
     <string name="action_settings">Settings</string>
-    <string name="section_format">Hello World from section: %1$d</string>
     <string name="action_listOfRecords">List of records</string>
     <string name="et_distance_hint">Distance</string>
 </resources>
