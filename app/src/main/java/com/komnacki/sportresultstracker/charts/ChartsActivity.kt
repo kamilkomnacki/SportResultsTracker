@@ -38,7 +38,7 @@ class ChartsActivity : AppCompatActivity() {
 
     val LOG_TAG: String = ChartsActivity::class.java.toString()
 
-    lateinit var recordsListViewModel: RecordsListViewModel
+    private lateinit var recordsListViewModel: RecordsListViewModel
     private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
     var listOfRecords: List<Record>? = null
     private var sportId: Long = -1
@@ -65,24 +65,19 @@ class ChartsActivity : AppCompatActivity() {
                     listOfRecords = null
                     mSectionsPagerAdapter = null
                     charts_container.adapter = null
-                    Log.e(LOG_TAG + "on Create", "currentFragment is NULL!")
-                    ///                   mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
-                    //                    charts_container.adapter = mSectionsPagerAdapter
+                    Log.e(LOG_TAG + " on Create", "currentFragment is NULL!")
                 } else {
                     listOfRecords = null
                     mSectionsPagerAdapter = null
                     charts_container.adapter = null
                     val fragTransaction = supportFragmentManager.beginTransaction()
                     fragTransaction.remove(currentFragment)
-                    //                    //fragTransaction.detach(currentFragment)
-                    //                    //fragTransaction.attach(currentFragment)
                     fragTransaction.commitAllowingStateLoss()
 
                     var somethingPopped = supportFragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                    Log.d(LOG_TAG, "Something popped: $somethingPopped")
+                    Log.d(LOG_TAG, "Popped back stack: $somethingPopped")
                 }
 
-                Log.d(LOG_TAG + " on create size1:", t.toString())
                 listOfRecords = t
                 mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
                 charts_container.adapter = mSectionsPagerAdapter
@@ -121,8 +116,6 @@ class ChartsActivity : AppCompatActivity() {
      * one of the sections/tabs/pages.
      */
     inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
-
-        //odświeżanie środkowych stron (np position=1 nie działa przy powrocie z listy rekorów)
         override fun destroyItem(container: ViewGroup?, position: Int, `object`: Any?) {
             Log.d(LOG_TAG, "Destroy Item called for position: $position!")
             super.destroyItem(container, position, `object`)
@@ -131,18 +124,13 @@ class ChartsActivity : AppCompatActivity() {
         override fun instantiateItem(container: ViewGroup?, position: Int): Any {
             Log.d(LOG_TAG, " instantiateItem work. Position: $position")
             return super.instantiateItem(container, position)
-//            return PlaceholderFragment.newInstance(
-//                    position + 1,
-//                    listOfRecords)
         }
 
         override fun getItem(position: Int): Fragment {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
             if (listOfRecords == null) {
-                Log.d("SectionPagerAdapter///:", "listOfRecords is null")
+                Log.d("SectionPagerAdapter:", "listOfRecords is null")
             } else {
-                Log.d("SectionPagerAdapter///:", listOfRecords.toString())
+                Log.d("SectionPagerAdapter:", listOfRecords.toString())
             }
             return PlaceholderFragment.newInstance(
                     position + 1,
@@ -150,7 +138,7 @@ class ChartsActivity : AppCompatActivity() {
         }
 
         override fun getCount(): Int {
-            return 3
+            return 2
         }
     }
 
@@ -209,9 +197,6 @@ class ChartsActivity : AppCompatActivity() {
                 2 -> {
                     lineData = timeToDateChart(arguments.getBoolean(ARG_IS_RECORDS_NULL))
                 }
-                3 -> {
-                    lineData = averageSpeedToDateChart(arguments.getBoolean(ARG_IS_RECORDS_NULL))
-                }
             }
 
             if (lineData == null)
@@ -222,9 +207,7 @@ class ChartsActivity : AppCompatActivity() {
                 when(pageNumber){
                     1 -> {chart = formatDistanceToDateChart(chart)}
                     2 -> {chart = formatTimeToDateChart(chart)}
-                    3 -> {chart = formatAverageSpeedToDateChart(chart)}
                 }
-
                 chart.invalidate()
             }
             return rootView
@@ -236,16 +219,6 @@ class ChartsActivity : AppCompatActivity() {
             chart.axisLeft.axisMinimum = chart.lineData.yMin
             chart.axisLeft.axisMaximum = chart.lineData.yMax
 
-
-            chart.xAxis.valueFormatter = DayAxisValueFormatter(chart)
-            chart.xAxis.setLabelCount(4, true)
-            return chart
-        }
-
-        private fun formatAverageSpeedToDateChart(chart: LineChart): LineChart {
-            chart.axisLeft.setLabelCount(5, true)
-            chart.axisLeft.axisMinimum = chart.lineData.yMin
-            chart.axisLeft.axisMaximum = chart.lineData.yMax
 
             chart.xAxis.valueFormatter = DayAxisValueFormatter(chart)
             chart.xAxis.setLabelCount(4, true)
@@ -280,7 +253,6 @@ class ChartsActivity : AppCompatActivity() {
 
             var lineDataSet: LineDataSet
             return if (entries.isEmpty()) {
-                Log.e(LOG_TAG, " Chart entries are null!")
                 null
             } else {
                 lineDataSet = LineDataSet(entries, LABEL_TITLE)
@@ -299,32 +271,6 @@ class ChartsActivity : AppCompatActivity() {
                         val x: Float = rec.date!!.time.div(24 * 60 * 60 * 1000).toFloat()
                         val y: Float = rec.time!!.toFloat()
                         Log.d(LOG_TAG, " [2] entries try to add ($x), ($y)")
-                        entries.add(Entry(x, y))
-                    }
-                }
-            }
-
-            var lineDataSet: LineDataSet
-            return if (entries.isEmpty()) {
-                Log.e(LOG_TAG, " Chart entries are null!")
-                null
-            } else {
-                lineDataSet = LineDataSet(entries, LABEL_TITLE)
-                lineDataSet = setLineDataSetOptions(lineDataSet)
-                LineData(lineDataSet)
-            }
-        }
-
-        private fun averageSpeedToDateChart(isRecordsNull: Boolean): LineData? {
-            val LABEL_TITLE = "Average speed to date"
-            var entries = ArrayList<Entry>()
-            if (!isRecordsNull) {
-                records = records.sortedBy { it.date }
-                for (rec in records) {
-                    if (!rec.distance!!.equals(Long.MIN_VALUE)) {
-                        val x: Float = rec.date!!.time.div(24 * 60 * 60 * 1000).toFloat()
-                        val y: Float = (rec.distance!!.toFloat() / rec.time!!.toFloat())
-                        Log.d(LOG_TAG, " [3] entries try to add ($x), ($y)")
                         entries.add(Entry(x, y))
                     }
                 }
