@@ -1,8 +1,6 @@
 package com.komnacki.sportresultstracker.database
 
-import android.annotation.SuppressLint
 import android.arch.lifecycle.LiveData
-import android.os.AsyncTask
 import android.util.Log
 import com.komnacki.sportresultstracker.App
 import javax.inject.Inject
@@ -22,15 +20,27 @@ class SportRepository {
     }
 
     fun insert(sport: Sport) {
-        insertAsyncTask().execute(sport)
+        object : DAOAsyncProcessor<Unit>(null) {
+            override fun doAsync() {
+                sportDAO.insert(sport)
+            }
+        }.start()
     }
 
     fun update(sport: Sport){
-        updateAsyncTask().execute(sport)
+        object : DAOAsyncProcessor<Unit>(null) {
+            override fun doAsync() {
+                sportDAO.update(sport)
+            }
+        }.start()
     }
 
     fun delete(sport: Sport) {
-        deleteAsyncTask().execute(sport)
+        object : DAOAsyncProcessor<Unit>(null) {
+            override fun doAsync() {
+                sportDAO.delete(sport)
+            }
+        }.start()
     }
 
     fun getAll(userId: Long): LiveData<List<Sport>> {
@@ -40,33 +50,5 @@ class SportRepository {
 
     fun get(id: Long): LiveData<Sport>{
         return sportDAO.get(id)
-    }
-
-    fun hasTime(id: Long): Boolean?{
-        return sportDAO.get(id).value!!.hasTime
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private inner class insertAsyncTask() : AsyncTask<Sport, Void, Void>() {
-        override fun doInBackground(vararg p0: Sport): Void? {
-            sportDAO.insert(p0.get(0))
-            return null
-        }
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private inner class updateAsyncTask() : AsyncTask<Sport, Void, Void>() {
-        override fun doInBackground(vararg p0: Sport): Void? {
-            sportDAO.update(p0[0])
-            return null
-        }
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private inner class deleteAsyncTask() : AsyncTask<Sport, Void, Void>() {
-        override fun doInBackground(vararg p0: Sport): Void? {
-            sportDAO.delete(p0[0])
-            return null
-        }
     }
 }

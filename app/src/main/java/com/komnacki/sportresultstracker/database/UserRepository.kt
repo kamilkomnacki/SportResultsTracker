@@ -1,8 +1,6 @@
 package com.komnacki.sportresultstracker.database
 
-import android.annotation.SuppressLint
 import android.arch.lifecycle.LiveData
-import android.os.AsyncTask
 import com.komnacki.sportresultstracker.App
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -19,42 +17,30 @@ class UserRepository() {
     }
 
     fun insert(user: User) {
-        insertAsyncTask().execute(user)
+        object : DAOAsyncProcessor<Unit>(null) {
+            override fun doAsync(): Unit {
+                userDAO.insert(user)
+            }
+        }.start()
     }
 
     fun update(user: User){
-        updateAsyncTask().execute(user)
+        object : DAOAsyncProcessor<Unit>(null) {
+            override fun doAsync() {
+                userDAO.update(user)
+            }
+        }.start()
     }
 
     fun delete(user: User){
-        deleteAsyncTask().execute(user)
+        object : DAOAsyncProcessor<Unit>(null) {
+            override fun doAsync() {
+                userDAO.delete(user)
+            }
+        }.start()
     }
 
     fun getAll(): LiveData<List<User>> {
         return list
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private inner class insertAsyncTask() : AsyncTask<User, Void, Void>() {
-        override fun doInBackground(vararg p0: User): Void? {
-            userDAO.insert(p0.get(0))
-            return null
-        }
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private inner class deleteAsyncTask() : AsyncTask<User, Void, Void>() {
-        override fun doInBackground(vararg p0: User): Void? {
-            userDAO.delete(p0[0])
-            return null
-        }
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private inner class updateAsyncTask() : AsyncTask<User, Void, Void>() {
-        override fun doInBackground(vararg p0: User): Void? {
-            userDAO.update(p0[0])
-            return null
-        }
     }
 }
