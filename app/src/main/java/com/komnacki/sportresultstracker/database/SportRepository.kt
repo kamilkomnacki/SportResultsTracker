@@ -43,6 +43,7 @@ class SportRepository {
         }.start()
     }
 
+
     fun getAll(userId: Long): LiveData<List<Sport>> {
         Log.d(LOG_TAG, "User ID to get sports: " + userId)
         return sportDAO.getAll(userId)

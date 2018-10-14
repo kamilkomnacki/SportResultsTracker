@@ -6,6 +6,8 @@ import android.arch.persistence.room.PrimaryKey
 
 @Entity(tableName = UserConsts.TABLE_NAME)
 class User {
+    var uc = UserConsts
+
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = UserConsts.ID)
