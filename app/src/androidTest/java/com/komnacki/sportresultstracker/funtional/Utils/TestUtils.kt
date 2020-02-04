@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView
 
 class TestUtils {
     companion object {
-        const val timeIntervalMillis: Long = 200
+        const val timeIntervalMillis: Long = 50
         const val userName = "Kamil"
         const val sportName = "Rower"
         const val NUMBER_OF_CHARTS = 2
