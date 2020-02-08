@@ -104,6 +104,5 @@ class DayAxisValueFormatter(private val chart: BarLineChartBase<*>) : IAxisValue
             days <= 1458 -> 2019
             else -> 2020
         }
-
     }
 }
