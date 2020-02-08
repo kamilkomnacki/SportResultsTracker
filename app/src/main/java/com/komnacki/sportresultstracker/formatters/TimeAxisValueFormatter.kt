@@ -11,9 +11,8 @@ class TimeAxisValueFormatter : IAxisValueFormatter {
             return ""
 
         val stringValue = StringBuilder(time.toString())
-        val len = stringValue.length
 
-        when(len){
+        when (val len = stringValue.length) {
             1,2,3 -> {return stringValue.toString() + " ms"}
             4,5 -> {
                 stringValue.insert(len-3, ":")

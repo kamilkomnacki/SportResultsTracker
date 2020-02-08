@@ -11,7 +11,7 @@ class DayAxisValueFormatter(private val chart: BarLineChartBase<*>) : IAxisValue
     val LOG_TAG = DayAxisValueFormatter::class.java.name
     private var mMonths = arrayOf("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
 
-    override fun getFormattedValue(value: Float, axis: AxisBase): String {
+    override fun getFormattedValue(value: Float, axis: AxisBase?): String {
 
         val days = (value - 16800).toInt()
 
