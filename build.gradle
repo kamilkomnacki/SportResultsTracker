@@ -30,29 +30,3 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-//task createTestReport(type: JacocoReport, dependsOn: ['testDevDebugUnitTest']) {
-//    group = "Reporting"
-//
-//    reports {
-//        xml.enabled = true
-//        html.enabled = true
-//    }
-//
-//    def fileFilter = ['**/R.class',
-//                      '**/R$*.class',
-//                      '**/BuildConfig.*',
-//                      '**/*$ViewInjector*.*',
-//                      '**/*$ViewBinder*.*',
-//                      '**/*$MembersInjector*.*',
-//                      '**/Manifest*.*',
-//                      '**/*Test*.*',
-//                      'android/**/*.*']
-//    def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/dev/debug", excludes: fileFilter)
-//    def mainSrc = "${project.projectDir}/src/main/java"
-//
-//    sourceDirectories = files([mainSrc])
-//    classDirectories = files([debugTree])
-//    executionData = files("${project.buildDir}/jacoco/testDevDebugUnitTest.exec")
-//}
-//
-//task createTestReports(type: JacocoReport, dependsOn: ['testDevDebugUnitTest', 'createDevDebugCoverageReport']) {}
