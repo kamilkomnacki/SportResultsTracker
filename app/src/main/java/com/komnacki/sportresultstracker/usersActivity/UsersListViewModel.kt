@@ -7,7 +7,7 @@ import com.komnacki.sportresultstracker.database.User
 import com.komnacki.sportresultstracker.database.UserRepository
 
 
-class UsersListViewModel(application: Application) : AndroidViewModel(application) {
+open class UsersListViewModel(application: Application) : AndroidViewModel(application) {
 
     private var userRepository = UserRepository()
     private var listOfUsers = userRepository.getAll()
