@@ -17,7 +17,6 @@ public class UsersListViewModelTest {
 //    @Mock
 //    App mApplication = new App();
 
-
 //    @InjectMocks
 //    UsersListViewModel usersListViewModel = new UsersListViewModel(mApplication);
 
