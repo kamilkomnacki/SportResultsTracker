@@ -20,6 +20,7 @@ public class UsersListViewModelTest {
 //    @InjectMocks
 //    UsersListViewModel usersListViewModel = new UsersListViewModel(mApplication);
 
+
 //    @Before
 //    public void setUp() {
 //        MockitoAnnotations.initMocks(this);
